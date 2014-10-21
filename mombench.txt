@@ -1,0 +1,63 @@
+=================================================================
+Scalability of Global High-Resolution Ocean Simulations using MOM
+=================================================================
+
+
+Introduction
+============
+
+We study the model
+
+
+Methods
+=======
+
+Numerical Model
+---------------
+
+The experiment used in this analysis is a global ocean-sea ice model of Spence
+et al. (2014), itself based on the Geophysical Fluid Dynamics Laboratory (GFDL)
+CM2.5 model (Delworth et al., 2012). The numerical submodels are the
+Modular Ocean Model (MOM) and the Sea Ice Simulator (SIS), built from the
+Flexible Modeling System (FMS) framework, which also provides the coupler
+between MOM and SIS. The simulations presented here use the MOM 5.1 release,
+which also includes the SIS and FMS components.
+
+Atmospheric forcing uses the Coordinated Ocean-ice Reference Experiment (CORE)
+datasets (Griffies et al., 2009, Large and Yeager, 2009).
+
+Resolution here
+
+
+Raijin
+------
+
+
+
+Fujin
+-----
+
+
+
+Results
+=======
+
+Scaling results
+---------------
+
+
+Profiling
+---------
+
+
+
+Discussion
+==========
+
+
+
+References
+==========
+
+Rapid subsurface warming and circulation changes of Antarctic coastal waters by
+poleward shifting winds (Spence et al.)
