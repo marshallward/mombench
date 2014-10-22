@@ -20,24 +20,59 @@ et al. (2014), itself based on the Geophysical Fluid Dynamics Laboratory (GFDL)
 CM2.5 model (Delworth et al., 2012). The numerical submodels are the
 Modular Ocean Model (MOM) and the Sea Ice Simulator (SIS), built from the
 Flexible Modeling System (FMS) framework, which includes the ocean-ice coupler.
-The simulations presented here use the MOM 5.1 release, which also includes the
-SIS and FMS components.
+The simulations presented here use the MOM 5.1 source code release, which
+includes the SIS and FMS components.
 
 Atmospheric forcing uses the Coordinated Ocean-ice Reference Experiment (CORE)
 datasets (Griffies et al., 2009, Large and Yeager, 2009).
 
 The numerical grid resolution is :math:`1440 \times 1080` horizontal grid
-points and 50 vertical levels, requiring approximately 600 MiB per field.
+points and 50 vertical levels, requiring approximately 600 MiB of memory per
+field.  Standard experiments are run for one month using an 1800s timestep, or
+1488 timesteps. A longer simulation time was chosen to represent a common
+integration time for scientific analysis, as well as
+
+
+Profiling
+---------
+
+
 
 
 Raijin
 ------
 
+Raijin is the principal supercomputer of the National Computational
+Infrastructure (NCI) National Facility in Australia. It is a Fujitsu PRIMERGY
+cluster comprised of 3592 computing nodes, with each containing two :math:`2.6
+\textt{GHz}` 8-core Intel Xeon Sandy Bridge CPUs (E5-2670 spec ref here), with
+a total core count of :math:`57 472`. Operational nodes have approximately
+:math:`32 \textt{GiB}` of memory, and higher memory on select nodes.
 
+Interconnect (Infiniband) details.
+
+OS platform (kernel mostly), scheduler, file system, etc
 
 Fujin
 -----
 
+Fujin is NCI's Fujitsu FX10 cluster comprised of 96 compute nodes, each
+containing a :math:`1.8 \textt{GHz}` 16-core SPARC64 IXfx CPU (ref). For this
+investigation, numerical experiments were limited to a maximum of 84 nodes or
+1344 cores.
+
+Explain interconnect layout here: Tofu node (2x3x2) x 8
+
+Other points:
+   - OS platform
+   - Filesystem (FEFS; Lustre fork)
+
+When compared to Raijin, the lower clock speed of Fujin's CPUs will necessarily
+result in lower optimal performance for computationally-bound software.
+However, the fixed Tofu interconnect offers the potential for optimized node
+layout and efficient scalability for higher CPU counts.
+
+TODO: Explain our map layout strategy
 
 
 Results
@@ -60,5 +95,5 @@ Discussion
 References
 ==========
 
-Rapid subsurface warming and circulation changes of Antarctic coastal waters by
-poleward shifting winds (Spence et al.)
+- Rapid subsurface warming and circulation changes of Antarctic coastal waters
+  by poleward shifting winds (Spence et al.)
