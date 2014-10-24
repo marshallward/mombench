@@ -15,13 +15,13 @@ Methods
 Numerical Model
 ---------------
 
-The experiment used in this analysis is a global ocean-sea ice model of Spence
-et al. (2014), itself based on the Geophysical Fluid Dynamics Laboratory (GFDL)
-CM2.5 model (Delworth et al., 2012). The numerical submodels are the
-Modular Ocean Model (MOM) and the Sea Ice Simulator (SIS), built from the
-Flexible Modeling System (FMS) framework, which includes the ocean-ice coupler.
-The simulations presented here use the MOM 5.1 source code release, which
-includes the SIS and FMS components.
+The experiment used in this analysis is a global ocean-sea ice model used in
+Spence et al. (2014), which was based on the Geophysical Fluid Dynamics
+Laboratory (GFDL) CM2.5 model (Delworth et al., 2012). The numerical submodels
+are the Modular Ocean Model (MOM) and the Sea Ice Simulator (SIS), built from
+the Flexible Modeling System (FMS) framework, which includes the ocean-ice
+coupler.  The simulations presented here use the MOM 5.1 source code release,
+which includes the SIS and FMS components.
 
 Atmospheric forcing uses the Coordinated Ocean-ice Reference Experiment (CORE)
 datasets (Griffies et al., 2009, Large and Yeager, 2009).
@@ -30,13 +30,19 @@ The numerical grid resolution is :math:`1440 \times 1080` horizontal grid
 points and 50 vertical levels, requiring approximately 600 MiB of memory per
 field.  Standard experiments are run for one month using an 1800s timestep, or
 1488 timesteps. A longer simulation time was chosen to represent a common
-integration time for scientific analysis, as well as
+integration time for scientific analysis, which the additional benefit of
+improved statistical results.
 
 
 Profiling
 ---------
 
+The model runtimes reported here use the walltime reported within the model by
+the internal FMS timer, which is itself based on the ``system_clock``
+subroutine of the Intel Fortran compiler and the system clock of the Linux
+kernel.
 
+Basic profiling times are call counts are reported
 
 
 Raijin
