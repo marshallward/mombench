@@ -2,7 +2,8 @@
   layout:
     nx: 16
     ny: 10
-  mpi: {}
+  mpi:
+    mean: 0.187021
   ncpus: 160
   runtime:
     coupler: 1144.7482930000001
@@ -11,11 +12,13 @@
     init: 87.220011
     model: 7499.6046589999996
     ocean: 6191.4092790000004
+    total: 7502.2178
 240:
   layout:
     nx: 16
     ny: 15
-  mpi: {}
+  mpi:
+    mean: 0.208935
   ncpus: 240
   runtime:
     coupler: 790.56360700000005
@@ -24,11 +27,13 @@
     init: 124.222492
     model: 5043.018642
     ocean: 4046.8850229999998
+    total: 5046.8540
 480:
   layout:
     nx: 16
     ny: 30
-  mpi: {}
+  mpi:
+    mean: 0.233257
   ncpus: 480
   runtime:
     coupler: 490.705017
@@ -37,11 +42,13 @@
     init: 99.909823000000003
     model: 2658.221333
     ocean: 1986.2559160000001
+    total: 2661.4031
 960:
   layout:
     nx: 16
     ny: 60
-  mpi: {}
+  mpi:
+    mean: 0.272046
   ncpus: 960
   runtime:
     coupler: 339.87356999999997
@@ -50,11 +57,13 @@
     init: 140.22973099999999
     model: 1567.1601439999999
     ocean: 1013.312011
+    total: 1572.4260
 1344:
   layout:
     nx: 16
     ny: 84
-  mpi: {}
+  mpi:
+    mean: 0.304979
   ncpus: 1344
   runtime:
     coupler: 335.40015899999997
@@ -63,4 +72,4 @@
     init: 176.321921
     model: 1347.593468
     ocean: 766.87748799999997
-
+    total: 1355.4467
