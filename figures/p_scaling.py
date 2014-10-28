@@ -24,7 +24,7 @@ speedup = {}
 effcy = {}
 for p in prof_data:
     pdata = prof_data[p]
-    wdata = sorted([(n, pdata[n]['runtime']['model']) for n in pdata])
+    wdata = sorted([(n, pdata[n]['runtime']['total']) for n in pdata])
     ncpus_raw, wtime_raw = zip(*wdata)
 
     ncpus[p] = np.array(ncpus_raw)
