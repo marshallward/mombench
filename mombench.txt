@@ -50,10 +50,10 @@ Raijin
 
 Raijin is the principal supercomputer of the National Computational
 Infrastructure (NCI) National Facility in Australia. It is a Fujitsu PRIMERGY
-cluster comprised of 3592 computing nodes, with each containing two :math:`2.6
-\textt{GHz}` 8-core Intel Xeon Sandy Bridge CPUs (E5-2670 spec ref here), with
-a total core count of :math:`57 472`. Operational nodes have approximately
-:math:`32 \textt{GiB}` of memory, and higher memory on select nodes.
+cluster comprised of 3592 computing nodes, with each containing two 2.6 GHz
+8-core Intel Xeon Sandy Bridge CPUs (E5-2670 spec ref here), with a total core
+count of 57472. Operational nodes have approximately 32 GiB of memory, and
+higher memory on select nodes.
 
 Interconnect (Infiniband) details.
 
@@ -63,9 +63,8 @@ Fujin
 -----
 
 Fujin is NCI's Fujitsu FX10 cluster comprised of 96 compute nodes, each
-containing a :math:`1.8 \textt{GHz}` 16-core SPARC64 IXfx CPU (ref). For this
-investigation, numerical experiments were limited to a maximum of 84 nodes or
-1344 cores.
+containing a 1.8 GHz 16-core SPARC64 IXfx CPU (ref). For this investigation,
+numerical experiments were limited to a maximum of 84 nodes or 1344 cores.
 
 Explain interconnect layout here: Tofu node (2x3x2) x 8
 
