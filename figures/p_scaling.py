@@ -24,7 +24,7 @@ speedup = {}
 effcy = {}
 for p in prof_data:
     pdata = prof_data[p]
-    wdata = sorted([(n, pdata[n]['runtime']['total']) for n in pdata])
+    wdata = sorted([(n, pdata[n]['runtime']['model']) for n in pdata])
     ncpus_raw, wtime_raw = zip(*wdata)
 
     ncpus[p] = np.array(ncpus_raw)
@@ -48,9 +48,20 @@ for ax in (ax_wt, ax_eff):
     ax.set_xlim(100, 2000)
     ax.set_xticks(xticks)
     ax.set_xticklabels(xticks)
+    ax.set_xlabel('Number of CPUs')
+
+ax_eff.set_ylim(0., 1.05)
+
+ax_wt.set_title('Model runtime')
+ax_wt.set_ylabel('Walltime (s)')
+
+ax_sp.set_title('Runtime speedup relative to 240 CPUs')
+ax_sp.set_ylabel('Speedup')
+ax_sp.plot(np.arange(0, 2000), np.arange(0, 2000) / 240.,
+           color='k', linestyle='--')
 
 ax_eff.set_title('Scaling efficiency relative to 240 CPUs')
-ax_eff.set_ylim(0., 1.05)
+ax_eff.set_ylabel('Scaling efficiency')
 
 ax_eff.axhline(1.0, color='k', linestyle='--')
 ax_eff.axhline(0.8, color='k', linestyle=':', linewidth=0.5)
