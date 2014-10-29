@@ -14,11 +14,10 @@ ISend
 
 do_check_r8_3d:
    - 2027984   sends
-      = 8 adj. tiles * 253498 fields
-         from:
-         - 202887:   mpp_update_domain2d_r8_2d
-         -  46147:   mpp_update_domain2d_r8_3d
-         -   4464:   mpp_update_domain2d_r8_4d
+   = 8 adj. tiles * 253498 fields
+      - 202887:   mpp_update_domain2d_r8_2d
+      -  46147:   mpp_update_domain2d_r8_3d
+      -   4464:   mpp_update_domain2d_r8_4d
 
 mpp_update_domain2d_r8_2d:
    - 420140 fields (reduced to 202887)
@@ -45,7 +44,7 @@ mpp_update_domain2d_r8_2d:
                = 17856
          # ??? need to check this
 
-         (Cum: 162192)
+         (Cum: ???)
 
       -  8928: ocean_barotropic_mod_mp_ocean_eta_smooth
          = 1488 * (3 + 3)
@@ -60,10 +59,14 @@ mpp_update_domain2d_r8_3d:
    - 87811 calls (buffered to 46147):
 
       - 26784: ocean_bihgen_friction_mod_mp_bihgen_friction
-         = Nt + (2 + 2 * 8~ strain fields)
-            => buffered to Nt * 3?
+         = Nt * (8~ + 2~ + 8~)
+            => buffered to Nt * 3 = 4464
 
       - 17856: ocean_submesoscale_mod_mp_compute_psi
+         = 4 * smooth_psi_num
+         = 4 * 3
+            (unbuffered)
+         =
 
       - 11904: ice_model_mod_mp_transport
 
@@ -80,7 +83,8 @@ mpp_update_domain2d_r8_3d:
 mpp_update_domain2d_r8_4d:
 
    - 2976: ocean_submesoscale_mod_mp_compute_psi
-     = Nt * 2
+      = Nt * 2
+         (unbuffered)
 
    - 1488: ocean_vert_kpp_mom4p1_mod_mp_vert_mix_kpp_mom4p1
      = Nt
