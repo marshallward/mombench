@@ -19,9 +19,9 @@ for platform, fname in zip(platforms, pdata_files):
 prof_data['12ppn'].pop(3840)
 
 ncpus = {}
-wtime = {}
-effcy = {}
 pcomm = {}
+msend = {}
+mreduce = {}
 
 for p in prof_data:
     pdata = prof_data[p]
@@ -84,6 +84,7 @@ for ax in (ax_pcomm, ax_call):
 
 for p in ('raijin', 'ht', '12ppn', 'ladder', 'snake'):
     ax_pcomm.plot(ncpus[p], pcomm[p], marker='+')
+    ax_call.plot(ncpus[p], mreduce[p])
 
 plt.tight_layout()
 #plt.savefig('scaling.pdf', bb_inches='tight')

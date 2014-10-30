@@ -4,6 +4,10 @@
     ny: 10
   mpi:
     mean: 0.187021
+    reduce:
+      time: 0
+    wait:
+      time: 0
   ncpus: 160
   runtime:
     coupler: 1144.7482930000001
@@ -19,6 +23,10 @@
     ny: 15
   mpi:
     mean: 0.208935
+    reduce:
+      time: 0
+    wait:
+      time: 0
   ncpus: 240
   runtime:
     coupler: 790.56360700000005
@@ -34,6 +42,10 @@
     ny: 30
   mpi:
     mean: 0.233257
+    reduce:
+      time: 0
+    wait:
+      time: 0
   ncpus: 480
   runtime:
     coupler: 490.705017
@@ -49,6 +61,10 @@
     ny: 60
   mpi:
     mean: 0.272046
+    reduce:
+      time: 0
+    wait:
+      time: 0
   ncpus: 960
   runtime:
     coupler: 339.87356999999997
@@ -64,6 +80,10 @@
     ny: 84
   mpi:
     mean: 0.304979
+    reduce:
+      time: 0
+    wait:
+      time: 0
   ncpus: 1344
   runtime:
     coupler: 335.40015899999997
