@@ -12,6 +12,9 @@ ISend
    -    2976   cut_check               # Ice
    -     ...
 
+Scalar1
+-------
+
 do_check_r8_3d:
    - 2027984   sends
    = 8 adj. tiles * 253498 fields
@@ -23,17 +26,18 @@ mpp_update_domain2d_r8_2d:
    - 420140 fields (reduced to 202887)
    from:
       - 321048:   ice_dyn_mod_mp_ice_dynamics:
-         = 1488 * 72 * 3
-         = Nt * Nz_ice * 3 fields
-            -> buffered to a single call (Nt * Ni)
-               = 107136
+         = 1488 * 72 * 3~
+         = Nt * Nz_ice * {sig11, sig12, sig22}
+      => buffered:
+         = 107136
+
+      (Cum: 107136)
 
       -  37200:   ice_grid_mod_mp_ice_advect:
          = 1488 * 5 * 5
-         = Nt * (Nz_ice - 1) * 5 fields
-         * No buffering
+         = Nt * (Nz_ice - 1) * {5 sea ice fields...}
 
-         (Cum: 144336)
+      (Cum: 144336)
 
       # (I do not understand this one!)
       - 29760:    ocean_barotropic_mod_mp_pred_corr_tropic_depth_bgrid
@@ -42,16 +46,12 @@ mpp_update_domain2d_r8_2d:
          = Nt * 10 (* 2???)
             => Buffered to Nt * 6 (* 2?)
                = 17856
-         # ??? need to check this
 
-         (Cum: ???)
+      (Cum: -)
 
       -  8928: ocean_barotropic_mod_mp_ocean_eta_smooth
          = 1488 * (3 + 3)
-         = Nt * (3 + N_tracer)
-         * No buffering
-
-         (Cum: 171120)
+         = Nt * (3 + N_tracers)
 
       -
 
@@ -60,31 +60,59 @@ mpp_update_domain2d_r8_3d:
 
       - 26784: ocean_bihgen_friction_mod_mp_bihgen_friction
          = Nt * (8~ + 2~ + 8~)
-            => buffered to Nt * 3 = 4464
+      -> Buffered:
+         => 4464 (Nt * 3)
+
+      (Cum: 26784 | 4464)
 
       - 17856: ocean_submesoscale_mod_mp_compute_psi
-         = 4 * smooth_psi_num
-         = 4 * 3
-            (unbuffered)
-         =
+         = 1488 * 3 * 4
+         = Nt * smooth_psi_num * 4
+
+      (Cum: 44640 | 22320)
 
       - 11904: ice_model_mod_mp_transport
+         = 1488 * (1 + 4~ + 1 + 2~)
+         = Nt * (1 + 4~ + 1 + 2~)
+      -> Buffered:
+         = 5952
+         = Nt * 4
+
+      (Cum: 56544 | 28272)
 
       - 10416: ocean_thickness_mod_mp_update_ucell_thickness
+         = 1488 * 7
+         = Nt * 7 (+ 3 * blob)
 
-      -  8929: ocean_tracer_advect_mod_mp_advect_tracer_mdppm
+      (Cum: 66960 | 38688)
+
+      -  8928: ocean_tracer_advect_mod_mp_advect_tracer_mdppm
+         = 1488 * 3 * 2
+         = Nt * N_tracer * 2
+         (Note: reduced halo??)
+
+      (Cum: 75889 | 47616??)
 
       -  5952: ocean_model_mod_mp_update_ocean_model
+        = 1488 * (1 + 3~)
+        = 1488 * (1 + N_tracers)
+      -> Buffered:
+         = 2976
 
       -  2979: xgrid_mod_mp_put_1_to_xgrid_order_2
 
       -
 
 mpp_update_domain2d_r8_4d:
+   - 4464 calls
 
    - 2976: ocean_submesoscale_mod_mp_compute_psi
       = Nt * 2
          (unbuffered)
 
+   (Cum: 2976)
+
    - 1488: ocean_vert_kpp_mom4p1_mod_mp_vert_mix_kpp_mom4p1
      = Nt
+
+   (Cum: 4464 - done!)

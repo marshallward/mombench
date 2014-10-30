@@ -38,7 +38,7 @@ for p in prof_data:
                          / (np.array(ncpus[p]) * np.array(wtime[p][model])))
 
 # Wall time across platforms
-fig, axes = plt.subplots(3, 1, sharex=True, sharey=True)
+fig, axes = plt.subplots(3, 1, sharex=True, sharey=True, figsize=(8,9.5))
 
 xticks = ncpus['12ppn']
 xticks = np.insert(xticks, 1, 160)
@@ -65,17 +65,17 @@ axes[0].set_title('Scaling efficiency relative to 240 CPUs')
 axes[1].set_ylabel('Scaling efficiency')
 axes[2].set_xlabel('Number of CPUs')
 
-#ax_lines = {ax_ocn: [],
-#            ax_ice: [],
-#            ax_cpl: []}
-
+ax_lines = []
 titles = ['Default', 'Hyperthr.', '12 PPN', 'Ladder', 'Snake']
 for (model, ax) in zip(submodels, axes):
     for p in ('raijin', 'ht', '12ppn', 'ladder', 'snake'):
         ax_l, = ax.plot(ncpus[p], effcy[p][model], marker='+')
-        #ax_lines[ax].append(ax_l)
 
-    #ax.legend(ax_lines[ax], titles, loc='best')
+        if ax == axes[0]:
+            ax_lines.append(ax_l)
 
-#plt.savefig('submodels.pdf', bb_inches='tight')
+axes[0].legend(ax_lines, titles, loc='best')
+
+plt.tight_layout()
+#plt.savefig('submodels.pdf')
 plt.show()

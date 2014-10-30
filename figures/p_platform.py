@@ -41,7 +41,7 @@ r2_fx10 = ax2.bar(range(3, 5), calcs[3:], color='r', align='center')
 rect_set[ax2] = (r2_x86, r2_fx10)
 
 ax1.set_title('Walltime on 480 CPUs across hardware configurations')
-ax2.set_title('Weighted ocean model instruction count')
+ax2.set_title('Weighted ocean submodel instruction count')
 
 ax1.set_ylabel('Walltime (s)')
 ax2.set_ylabel('Instruction count')
@@ -67,4 +67,5 @@ for ax in (ax1, ax2):
 
 ax1.legend((r2_x86[0], r2_fx10[0]), ('Raijin', 'Fujin'), loc='best')
 
+plt.tight_layout()
 plt.savefig('platforms.pdf', bbox_inches='tight')
