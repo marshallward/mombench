@@ -68,4 +68,4 @@ for ax in (ax1, ax2):
 ax1.legend((r2_x86[0], r2_fx10[0]), ('Raijin', 'Fujin'), loc='best')
 
 plt.tight_layout()
-plt.savefig('platforms.pdf', bbox_inches='tight')
+plt.savefig('platform.pdf')

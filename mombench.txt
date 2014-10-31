@@ -26,12 +26,12 @@ which includes the SIS and FMS components.
 Atmospheric forcing uses the Coordinated Ocean-ice Reference Experiment (CORE)
 datasets (Griffies et al., 2009, Large and Yeager, 2009).
 
-The numerical grid resolution is :math:`1440 \times 1080` horizontal grid
-points and 50 vertical levels, requiring approximately 600 MiB of memory per
-field.  Standard experiments are run for one month using an 1800s timestep, or
-1488 timesteps. A longer simulation time was chosen to represent a common
-integration time for scientific analysis, which the additional benefit of
-improved statistical results.
+The numerical grid resolution is 1440 x 1080 horizontal grid points and 50
+vertical levels, requiring approximately 600 MiB of memory per field.  Standard
+experiments are run for one month using an 1800s timestep, or 1488 timesteps. A
+longer simulation time was chosen to represent a common integration time for
+scientific analysis, which the additional benefit of improved statistical
+results.
 
 
 Profiling
@@ -59,6 +59,13 @@ Interconnect (Infiniband) details.
 
 OS platform (kernel mostly), scheduler, file system, etc
 
+Explain the three configurations:
+
+- Default
+- Hyperthreaded
+- 12 processes per node
+
+
 Fujin
 -----
 
@@ -82,6 +89,27 @@ TODO: Explain our map layout strategy
 
 Results
 =======
+
+Hardware Configuration
+----------------------
+
+.. image:: figures/platform.pdf
+
+Figure 1a shows the total runtime for a 480-CPU experiment across different
+platform configurations.  On Raijin, hardware configuration had a major impact
+on performance, with observed speedups of 1.25 and 1.59 on hyperthreaded and 12
+process-per-node experiments, respectively.  Process layout on Fujin had an
+observable but less notable impact, with the "snake" layout achieving a 5%
+improvement in comparison to the "ladder" layout.
+
+Walltimes on Raijin are notably faster than on Fujin, with the fastest runs on
+Raijin outperforming the Fujin jobs by more than a factor of two. Much of this
+difference in performance can be attributed to the clock speeds of the two
+platforms.  But with a clock speed ratio of 1.41, there is still a substantial
+distinction in performance.
+
+Figure 1b attempts to characterise the computational difference
+
 
 Scaling results
 ---------------
