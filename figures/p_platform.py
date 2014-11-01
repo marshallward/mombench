@@ -18,7 +18,7 @@ for plat, fname in zip(platforms, pdata_files):
     with open(fname) as pfile:
         prof_data[plat] = yaml.load(pfile)
 
-wtimes = np.array([prof_data[p][480]['runtime']['ocean'] for p in platforms])
+wtimes = np.array([prof_data[p][480]['runtime']['total'] for p in platforms])
 pcomm = np.array([prof_data[p][480]['mpi']['mean'] for p in platforms])
 
 cycles = np.empty(wtimes.shape)
@@ -47,7 +47,7 @@ ax1.set_ylabel('Walltime (s)')
 ax2.set_ylabel('Instruction count')
 
 ax1.set_yticks(np.linspace(0., 2000., 5))
-ax2.set_ylim(0., 3.2e12)
+#ax2.set_ylim(0., 3.2e12)
 
 # X axis is shared
 ax1.set_xticks(range(5))

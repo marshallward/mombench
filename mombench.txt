@@ -96,19 +96,34 @@ Hardware Configuration
 .. image:: figures/platform.pdf
 
 Figure 1a shows the total runtime for a 480-CPU experiment across different
-platform configurations.  On Raijin, hardware configuration had a major impact
-on performance, with observed speedups of 1.25 and 1.59 on hyperthreaded and 12
-process-per-node experiments, respectively.  Process layout on Fujin had an
-observable but less notable impact, with the "snake" layout achieving a 5%
-improvement in comparison to the "ladder" layout.
+platform configurations.  The configuration choice on Raijin had a major impact
+on performance, with observed speedups of 1.28 and 1.6 for hyperthreaded and
+12 process-per-node experiments, respectively.  Process layout on Fujin had an
+observable but less notable impact, with the "snake" layout achieving a 1.15
+speedup in comparison to the "ladder" layout.
 
-Walltimes on Raijin are notably faster than on Fujin, with the fastest runs on
-Raijin outperforming the Fujin jobs by more than a factor of two. Much of this
-difference in performance can be attributed to the clock speeds of the two
-platforms.  But with a clock speed ratio of 1.41, there is still a substantial
-distinction in performance.
+Experiment runtimes on Raijin are faster than on Fujin, with the fastest runs
+on Raijin outperforming the Fujin jobs by more than a factor of two. Much of
+this difference in performance can be attributed to the clock speeds of the two
+platforms.  However, the clock speed ratio of the Raijin and Fujin CPUs is only
+1.41, and cannot alone account for the differences in performance.
 
-Figure 1b attempts to characterise the computational difference
+Figure 1b attempts to characterise this performance difference across the
+platforms by constructing an estimate of the number of concurrent computational
+instructions during the simulation.  We estimate this instruction count by
+the following formula:
+
+.. math::
+
+   N_c = (1 - p) f \tau
+
+where :math:`p` is the mean fraction of MPI instructions across all ranks,
+:math:`f` is the CPU clock speed, and :math:`\tau` is the runtime.  (Discuss
+limitations of this estimate... not so sure myself!).
+
+Despite the limitations of this estimate, it does illustrate a strong
+distinction in the computational efficiency between the platforms which cannot
+be account for by clock speed alone.
 
 
 Scaling results
