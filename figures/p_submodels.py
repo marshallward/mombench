@@ -77,5 +77,5 @@ for (model, ax) in zip(submodels, axes):
 axes[0].legend(ax_lines, titles, loc='best')
 
 plt.tight_layout()
-#plt.savefig('submodels.pdf')
-plt.show()
+plt.savefig('submodels.pdf')
+#plt.show()

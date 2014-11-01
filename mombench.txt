@@ -93,8 +93,6 @@ Results
 Hardware Configuration
 ----------------------
 
-.. image:: figures/platform.pdf
-
 Figure 1a shows the total runtime for a 480-CPU experiment across different
 hardware platforms and configurations.  The configuration choice on Raijin had
 a major impact on performance, with observed speedups of 1.28 and 1.60 for
@@ -132,8 +130,6 @@ software, make it difficult to make further comparisons.
 Scaling results
 ---------------
 
-.. image:: figures/scaling.pdf
-
 The general performance and scalability of each experiment across different
 CPUs is shown in Figure 2. The general trend discussed in the previous section
 is also observed in Figure 2a, with simulations on Raijin generally
@@ -141,11 +137,45 @@ outperforming those on Fujin.  Hyperthreaded and 12 process-per-node jobs
 continue to outperform the default runs on Raijin, and "snake" layouts
 outperform "ladder" layouts on Fujin.
 
-The most notable trend is the dramatic loss of performance of default
-experiments on Raijin, where scalability begins to diminish at 480 CPUs and
-walltimes begin to reverse trend and increase after 960 CPUs.  Scalability is
-restored by either using hyperthreading or by using fewer cores, indicating
-the presence of a computational bottleneck
+The most notable observation is the dramatic loss of performance of experiments
+on Raijin using the default configuration, where scalability begins to diminish
+at 480 CPUs and walltimes begin to reverse trend and increase after 960 CPUs.
+Scalability is restored by either using hyperthreading or by using fewer cores,
+indicating the presence of a computational bottleneck related to process
+threads.
+
+The relative efficiency of each configuration is shown in Figure 2b, which is
+computed as
+
+.. math::
+
+\epsilon = \frac{n_r \tau_r} {n \tau_n}
+
+where :math:`n` is the number of CPUs, :math:`\tau_n` is the runtime using
+:math:`n` CPUs, and :math:`r` is the reference experiment, which is 240 CPUs
+for all configurations except the "ladder" Fujin runs, which use 255 CPUs.
+
+Figure 2b shows that, with the exception of the default Raijin setup, all runs
+demonstrate scalable performance up to 960 CPUs and maintain an efficiency
+greater than 80%. Experiments on Raijin scale slightly better than on Fujin,
+although the results are remains comparable over all platforms and
+configurations. Beyond 960 CPUs, all experiments begin to drop substantially
+and no longer provide a reasonable level of performance.
+
+This performance can be further clarified by investigating the scalability of
+the respective submodels, as shown in Figure 3.  Figure 3a shows that, despite
+a reduction of general scalability around 960 CPUs, the ocean submodel
+continues to scale efficiently to 1920 CPUs.  However, the ice and coupling
+model subcomponents, shown in Figures 3b and 3c, grow progressively worse in
+performance as the number of CPUs increase, indicating that the major
+bottlenecks are due to the ice model and submodel flux exchange.
+
+There is some evidence of improved efficiency in the ocean model, particularly
+on the Fujin experiments, suggesting that the communication bottlenecks in the
+ice and coupler models also release additional resources for the ocean model.
+
+Scaling efficiency on Fujin appears to be better than Raijin for the ocean
+model, although it is notably lower in the other components.
 
 
 Profiling
@@ -163,3 +193,13 @@ References
 
 - Rapid subsurface warming and circulation changes of Antarctic coastal waters
   by poleward shifting winds (Spence et al.)
+
+
+Figures
+=======
+
+.. image:: figures/platform.pdf
+
+.. image:: figures/scaling.pdf
+
+.. image:: figures/submodels.pdf
