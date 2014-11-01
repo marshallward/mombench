@@ -96,11 +96,11 @@ Hardware Configuration
 .. image:: figures/platform.pdf
 
 Figure 1a shows the total runtime for a 480-CPU experiment across different
-platform configurations.  The configuration choice on Raijin had a major impact
-on performance, with observed speedups of 1.28 and 1.6 for hyperthreaded and
-12 process-per-node experiments, respectively.  Process layout on Fujin had an
-observable but less notable impact, with the "snake" layout achieving a 1.15
-speedup in comparison to the "ladder" layout.
+hardware platforms and configurations.  The configuration choice on Raijin had
+a major impact on performance, with observed speedups of 1.28 and 1.60 for
+hyperthreaded and 12 process-per-node experiments, respectively.  Process
+layout on Fujin had an observable but less notable impact, with the "snake"
+layout achieving a 1.15 speedup in comparison to the "ladder" layout.
 
 Experiment runtimes on Raijin are faster than on Fujin, with the fastest runs
 on Raijin outperforming the Fujin jobs by more than a factor of two. Much of
@@ -108,26 +108,44 @@ this difference in performance can be attributed to the clock speeds of the two
 platforms.  However, the clock speed ratio of the Raijin and Fujin CPUs is only
 1.41, and cannot alone account for the differences in performance.
 
-Figure 1b attempts to characterise this performance difference across the
-platforms by constructing an estimate of the number of concurrent computational
-instructions during the simulation.  We estimate this instruction count by
-the following formula:
+Figure 1b attempts to clarify this performance difference across the platforms
+by estimating the mean number of concurrent computational instructions per CPU
+using the following formula:
 
 .. math::
 
    N_c = (1 - p) f \tau
 
 where :math:`p` is the mean fraction of MPI instructions across all ranks,
-:math:`f` is the CPU clock speed, and :math:`\tau` is the runtime.  (Discuss
-limitations of this estimate... not so sure myself!).
+:math:`f` is the CPU clock speed, and :math:`\tau` is the runtime.  This is an
+imperfect estimate, since there may be additional communication costs outside
+of the MPI library (*example??*), but it provides a reasonable approximation of
+vector calculation efficiency for each platform.
 
-Despite the limitations of this estimate, it does illustrate a strong
-distinction in the computational efficiency between the platforms which cannot
-be account for by clock speed alone.
+A direct comparison of :math:`N_c` across platforms reveals a notable
+difference in the computational efficiency between the platforms, with Fujin
+experiments requiring approximately 50% more non-communication cycles than
+Raijin.  Numerous other factors, particularly related to the underlying
+software, make it difficult to make further comparisons.
 
 
 Scaling results
 ---------------
+
+.. image:: figures/scaling.pdf
+
+The general performance and scalability of each experiment across different
+CPUs is shown in Figure 2. The general trend discussed in the previous section
+is also observed in Figure 2a, with simulations on Raijin generally
+outperforming those on Fujin.  Hyperthreaded and 12 process-per-node jobs
+continue to outperform the default runs on Raijin, and "snake" layouts
+outperform "ladder" layouts on Fujin.
+
+The most notable trend is the dramatic loss of performance of default
+experiments on Raijin, where scalability begins to diminish at 480 CPUs and
+walltimes begin to reverse trend and increase after 960 CPUs.  Scalability is
+restored by either using hyperthreading or by using fewer cores, indicating
+the presence of a computational bottleneck
 
 
 Profiling
