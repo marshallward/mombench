@@ -149,7 +149,7 @@ computed as
 
 .. math::
 
-\epsilon = \frac{n_r \tau_r} {n \tau_n}
+   \epsilon = \frac{n_r \tau_r} {n \tau_n}
 
 where :math:`n` is the number of CPUs, :math:`\tau_n` is the runtime using
 :math:`n` CPUs, and :math:`r` is the reference experiment, which is 240 CPUs
@@ -165,14 +165,15 @@ and no longer provide a reasonable level of performance.
 This performance can be further clarified by investigating the scalability of
 the respective submodels, as shown in Figure 3.  Figure 3a shows that, despite
 a reduction of general scalability around 960 CPUs, the ocean submodel
-continues to scale efficiently to 1920 CPUs.  However, the ice and coupling
+continues to scale efficiently to 1920 CPUs.  However, the sea ice and coupling
 model subcomponents, shown in Figures 3b and 3c, grow progressively worse in
 performance as the number of CPUs increase, indicating that the major
-bottlenecks are due to the ice model and submodel flux exchange.
+bottlenecks are due to the sea ice model and submodel flux exchange.
 
 There is some evidence of improved efficiency in the ocean model, particularly
 on the Fujin experiments, suggesting that the communication bottlenecks in the
-ice and coupler models also release additional resources for the ocean model.
+sea ice and coupler models also release additional resources for the ocean
+model.
 
 Scaling efficiency on Fujin appears to be better than Raijin for the ocean
 model, although it is notably lower in the other components.
@@ -181,11 +182,48 @@ model, although it is notably lower in the other components.
 Profiling
 ---------
 
+TODO?
 
 
 Discussion
 ==========
 
+Performance difference (compilers, chips, etc)
+
+Ocean vs Ice scalability
+
+Concurrent sea ice configuration
+
+MIC challenges
+
+
+Conclusion
+==========
+
+In this study, we have shown that the global :math:`0.25^\circ` resolution
+ocean-sea ice configurations of the MOM ocean model can run efficiently on both
+x86-based PRIMERGY clusters and SPARC-based FX10 platforms.  On the x86-based
+Raijin computing platform, we are able to simulate over 10 model years per day
+at a reasonably high level of efficiency.  On FX10 Fujin platform, we can
+simulate over 4 model years per day at a similar level of efficiency.
+
+In order to achieve a high level of performance on the Raijin platform, we were
+required to either reduce the number of processes per node to 12, leaving
+four cores to run idle during the simulation, or to enable hyperthreading on
+our CPUs, allowing two computational threads per core.  Although reducing the
+number of cores achieved a greater level of performance, hyperthreaded offers
+comparable results without any idle cores, and therefore achieving much greater
+efficiency.  When all 16 cores on each node were used without hyperthreading,
+the runtimes increased by a factor of three and were unable to operate at an
+acceptable level of performance.
+
+Comparsion of the submodels within the ice-ocean configuration show that the
+ocean model scales up to 2000 cores with only a negligible loss of efficiency,
+while the sea ice and coupling components cease to scale after 480 CPUs.
+Future efforts to improve the scalability of MOM should therefore target these
+subcomponents.
+
+Both platforms have been proven to be capable of (doing this...)
 
 
 References
