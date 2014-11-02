@@ -51,10 +51,10 @@ Raijin
 ------
 
 Raijin is the principal supercomputer of the National Computational
-Infrastructure (NCI) National Facility in Australia. It is a Fujitsu PRIMERGY
+Infrastructure (NCI) National Facility in Australia.  It is a Fujitsu PRIMERGY
 cluster comprised of 3592 computing nodes, with each containing two 2.6 GHz
 8-core Intel Xeon Sandy Bridge CPUs (E5-2670 spec ref here), with a total core
-count of 57472. Operational nodes have approximately 32 GiB of memory, and
+count of 57472.  Operational nodes have approximately 32 GiB of memory, and
 higher memory on select nodes.
 
 Interconnect (Infiniband) details.
@@ -72,7 +72,7 @@ Fujin
 -----
 
 Fujin is NCI's Fujitsu FX10 cluster consisting of 96 compute nodes, each
-containing a 1.8 GHz 16-core SPARC64 IXfx CPU (ref). For our investigation,
+containing a 1.8 GHz 16-core SPARC64 IXfx CPU (ref).  For our investigation,
 numerical experiments were limited to a maximum of 84 nodes or 1344 cores.
 
 The interconnect is a simplified version of Fujitsu's Tofu interconnect and
@@ -89,12 +89,12 @@ Other points:
    - Filesystem (FEFS; Lustre fork)
 
 We consider two configurations on the Tofu network, which we refer to as
-"ladder" or "snake" layouts (shown in Figure XXX).  The snake layout guarantees
-that all communications is exclusively between neighbor nodes, but it also
-requires that each node span an entire latitude line.  The ladder layout
-relaxes this span requirement by allowing us to divide a latitude line across
-two nodes, but it also requires diagonally adjacent messages to pass through
-non-neighbor nodes.
+"snake" or "ladder" layouts.  Node placement along a single tofu unit for each
+is shown in Figures 1 and 2.  The snake layout guarantees that all
+communications is exclusively between neighbor nodes, but it also requires that
+each node span an entire latitude line.  The ladder layout relaxes this span
+requirement by allowing us to divide a latitude line across two nodes, but it
+also requires diagonally adjacent messages to pass through non-neighbor nodes.
 
 Note: 1344 jobs have nonuniform tiles.
 
@@ -125,7 +125,7 @@ layout on Fujin had an observable but less notable impact, with the "snake"
 layout achieving a 1.15 speedup in comparison to the "ladder" layout.
 
 Experiment runtimes on Raijin are faster than on Fujin, with the fastest runs
-on Raijin outperforming the Fujin jobs by more than a factor of two. Much of
+on Raijin outperforming the Fujin jobs by more than a factor of two.  Much of
 this difference in performance can be attributed to the clock speeds of the two
 platforms.  However, the clock speed ratio of the Raijin and Fujin CPUs is only
 1.41, and cannot alone account for the differences in performance.
@@ -155,7 +155,7 @@ Scaling
 -------
 
 The general performance and scalability of each experiment across different
-CPUs is shown in Figure 2. The general trend discussed in the previous section
+CPUs is shown in Figure 2.  The general trend discussed in the previous section
 is also observed in Figure 2a, with simulations on Raijin generally
 outperforming those on Fujin.  Hyperthreaded and 12 process-per-node jobs
 continue to outperform the default runs on Raijin, and "snake" layouts
@@ -181,9 +181,9 @@ for all configurations except the "ladder" Fujin runs, which use 255 CPUs.
 
 Figure 2b shows that, with the exception of the default Raijin setup, all runs
 demonstrate scalable performance up to 960 CPUs and maintain an efficiency
-greater than 80%. Experiments on Raijin scale slightly better than on Fujin,
+greater than 80%.  Experiments on Raijin scale slightly better than on Fujin,
 although the results are remains comparable over all platforms and
-configurations. Beyond 960 CPUs, all experiments begin to drop substantially
+configurations.  Beyond 960 CPUs, all experiments begin to drop substantially
 and no longer provide a reasonable level of performance.
 
 This performance can be further clarified by investigating the scalability of
@@ -226,10 +226,10 @@ Conclusion
 
 In this study, we have shown that the global :math:`0.25^\circ` resolution
 ocean-sea ice configurations of the MOM ocean model can run efficiently on both
-x86-based PRIMERGY clusters and SPARC-based FX10 platforms.  On the x86-based
-Raijin computing platform, we are able to simulate over 10 model years per day
-at a reasonably high level of efficiency.  On FX10 Fujin platform, we can
-simulate over 4 model years per day at a similar level of efficiency.
+x86 PRIMERGY clusters and SPARC FX10 platforms.  On the x86-based Raijin
+computing platform, we are able to simulate over 10 model years per day at a
+reasonably high level of efficiency.  On FX10 Fujin platform, we can simulate
+over 4 model years per day at a similar level of efficiency.
 
 In order to achieve a high level of performance on the Raijin platform, we were
 required to either reduce the number of processes per node to 12, leaving
