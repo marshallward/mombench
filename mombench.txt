@@ -39,22 +39,12 @@ field.
 
 Standard experiments are run for one month using an 1800s timestep, or 1488
 ocean timesteps.  Each ocean timestep requires 72 sea ice timesteps.  A longer
-simulation time was chosen to represent a common integration time for
+simulation time was chosen to represent a typical integration time for
 scientific analysis, and to reduce the statistical variability of our
 walltimes.  Simulations using 960 CPUs were run three times to confirm the
-reproducibility of the results, and the runs based on median walltime are
-reported here.  Single simulations were used for other CPU counts.
-
-
-Profiling
----------
-
-The model runtimes reported here use the walltime reported within the model by
-the internal FMS timer, which is itself based on the ``system_clock``
-subroutine of the Intel Fortran compiler and the system clock of the Linux
-kernel.
-
-Basic profiling times are call counts are reported
+reproducibility of the results, and the run based on median walltime was
+selected for use in this study.  For other CPU counts, a single simulation was
+used for each configuration.
 
 
 Raijin
@@ -81,24 +71,44 @@ Explain the three configurations:
 Fujin
 -----
 
-Fujin is NCI's Fujitsu FX10 cluster comprised of 96 compute nodes, each
-containing a 1.8 GHz 16-core SPARC64 IXfx CPU (ref). For this investigation,
+Fujin is NCI's Fujitsu FX10 cluster consisting of 96 compute nodes, each
+containing a 1.8 GHz 16-core SPARC64 IXfx CPU (ref). For our investigation,
 numerical experiments were limited to a maximum of 84 nodes or 1344 cores.
 
-Explain interconnect layout here: Tofu node (2x3x2) x 8
-
-Other points:
-   - OS platform
-   - Filesystem (FEFS; Lustre fork)
+The interconnect is a simplified version of Fujitsu's Tofu interconnect and
+consists of 8 "Tofu units", where each unit consists of 12 nodes arranged as a
+3D torus of shape :math:`2 \times 3 \times 2`.
 
 When compared to Raijin, the lower clock speed of Fujin's CPUs will necessarily
 result in lower optimal performance for computationally-bound software.
 However, the fixed Tofu interconnect offers the potential for optimized node
 layout and efficient scalability for higher CPU counts.
 
-TODO: Explain our map layout strategy
+Other points:
+   - OS platform
+   - Filesystem (FEFS; Lustre fork)
+
+We consider two configurations on the Tofu network, which we refer to as
+"ladder" or "snake" layouts (shown in Figure XXX).  The snake layout guarantees
+that all communications is exclusively between neighbor nodes, but it also
+requires that each node span an entire latitude line.  The ladder layout
+relaxes this span requirement by allowing us to divide a latitude line across
+two nodes, but it also requires diagonally adjacent messages to pass through
+non-neighbor nodes.
 
 Note: 1344 jobs have nonuniform tiles.
+
+
+Profiling
+---------
+
+We use the IPM v2.0.2 profiler to construct basic runtime statistics.  Model
+runtimes, memory usage per CPU rank, and MPI runtimes are based on IPM output
+logs.
+
+Submodel runtimes are provided by the internal timers of the MOM ocean model,
+which are based on the ``system_clock`` subroutine of the Intel Fortran
+compiler and the system clock of the Linux kernel.
 
 
 Results
