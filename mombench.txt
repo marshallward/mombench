@@ -17,21 +17,33 @@ Numerical Model
 
 The experiment used in this analysis is a global ocean-sea ice model used in
 Spence et al. (2014), which was based on the Geophysical Fluid Dynamics
-Laboratory (GFDL) CM2.5 model (Delworth et al., 2012). The numerical submodels
+Laboratory (GFDL) CM2.5 model (Delworth et al., 2012).  The numerical submodels
 are the Modular Ocean Model (MOM) and the Sea Ice Simulator (SIS), built from
 the Flexible Modeling System (FMS) framework, which includes the ocean-ice
 coupler.  The simulations presented here use the MOM 5.1 source code release,
 which includes the SIS and FMS components.
 
-Atmospheric forcing uses the Coordinated Ocean-ice Reference Experiment (CORE)
-datasets (Griffies et al., 2009, Large and Yeager, 2009).
+The atmospheric forcing uses the corrected Normal Year Forcing of the
+Coordinated Ocean-ice Reference Experiment (CORE) datasets (Griffies et al.,
+2009, Large and Yeager, 2009).
 
-The numerical grid resolution is 1440 x 1080 horizontal grid points and 50
-vertical levels, requiring approximately 600 MiB of memory per field.  Standard
-experiments are run for one month using an 1800s timestep, or 1488 timesteps. A
-longer simulation time was chosen to represent a common integration time for
-scientific analysis, which the additional benefit of improved statistical
-results.
+The numerical grid of the ocean and sea ice models contains 1440 x 1080
+horizontal grid points.  The grid is a hybrid tripolar-Mercator-spherical grid
+with a nominal resolution of `0.25^\circ`.  The ocean and sea ice models use 50
+and 6 vertical levels, respectively.
+
+Parallelisation is achieved by decomposing the computational domain into tiles
+of equal size, with a halo of one grid spacing.  For each timestep, the halos
+of adjacent and diagonally adjacent tiles are updated, requiring 8 messages per
+field.
+
+Standard experiments are run for one month using an 1800s timestep, or 1488
+ocean timesteps.  Each ocean timestep requires 72 sea ice timesteps.  A longer
+simulation time was chosen to represent a common integration time for
+scientific analysis, and to reduce the statistical variability of our
+walltimes.  Simulations using 960 CPUs were run three times to confirm the
+reproducibility of the results, and the runs based on median walltime are
+reported here.  Single simulations were used for other CPU counts.
 
 
 Profiling
@@ -86,11 +98,13 @@ layout and efficient scalability for higher CPU counts.
 
 TODO: Explain our map layout strategy
 
+Note: 1344 jobs have nonuniform tiles.
+
 
 Results
 =======
 
-Hardware Configuration
+Platform Configuration
 ----------------------
 
 Figure 1a shows the total runtime for a 480-CPU experiment across different
@@ -127,8 +141,8 @@ Raijin.  Numerous other factors, particularly related to the underlying
 software, make it difficult to make further comparisons.
 
 
-Scaling results
----------------
+Scaling
+-------
 
 The general performance and scalability of each experiment across different
 CPUs is shown in Figure 2. The general trend discussed in the previous section
