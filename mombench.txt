@@ -23,14 +23,14 @@ the Flexible Modeling System (FMS) framework, which includes the ocean-ice
 coupler.  The simulations presented here use the MOM 5.1 source code release,
 which includes the SIS and FMS components.
 
-The atmospheric forcing uses the corrected Normal Year Forcing of the
-Coordinated Ocean-ice Reference Experiment (CORE) datasets (Griffies et al.,
-2009, Large and Yeager, 2009).
+The mode is forced by external atmospheric fields from the corrected Normal
+Year Forcing of the Coordinated Ocean-ice Reference Experiment (CORE) datasets
+(Griffies et al., 2009, Large and Yeager, 2009).
 
 The numerical grid of the ocean and sea ice models contains 1440 x 1080
 horizontal grid points.  The grid is a hybrid tripolar-Mercator-spherical grid
-with a nominal resolution of `0.25^\circ`.  The ocean and sea ice models use 50
-and 6 vertical levels, respectively.
+with a nominal resolution of :math:`0.25^\circ`.  The ocean and sea ice models
+use 50 and 6 vertical levels, respectively.
 
 Parallelisation is achieved by decomposing the computational domain into tiles
 of equal size, with a halo of one grid spacing.  For each timestep, the halos
@@ -53,19 +53,30 @@ Raijin
 Raijin is the principal supercomputer of the National Computational
 Infrastructure (NCI) National Facility in Australia.  It is a Fujitsu PRIMERGY
 cluster comprised of 3592 computing nodes, with each containing two 2.6 GHz
-8-core Intel Xeon Sandy Bridge CPUs (E5-2670 spec ref here), with a total core
-count of 57472.  Operational nodes have approximately 32 GiB of memory, and
-higher memory on select nodes.
+8-core Intel Xeon Sandy Bridge (E5-2670) CPUs (ref), with a total core
+count of 57472.  Operational nodes have approximately 32 GiB of memory, with
+more memory available on selected nodes.
 
-Interconnect (Infiniband) details.
+The cluster network uses InfiniBand FDR-14 interconnects, which provide peak
+(4x aggregate) transfer speeds up to 54 Gb/s between nodes.  The network uses a
+two-level fat tree configuration, with 72 nodes (one rack) on each switch, each
+connected to a top-level director switch.  Although it is possible to run jobs
+up to 1152 CPUs on a single rack, the high usage rate of Raijin tends to
+prevent such layouts.  We assume that all experiments in this study depend on
+the director switch.
 
-OS platform (kernel mostly), scheduler, file system, etc
+The operating system platform is CentOS 6.5, itself based on the Linux 2.6.32
+kernel.  Jobs are managed using the PBSPro scheduler, and files are kept under
+a Lustre v2.5 filesystem.
 
-Explain the three configurations:
+We use the Intel Compiler Suite v14.3.172 for model compilation.  MPI
+communication uses Open MPI v1.8.2 and data IO uses NetCDF v4.3.0, which was
+built using HDF5 v1.8.10.  The model is built with the ``-O2`` and ``--xhost``
+optimisation flags.
 
-- Default
-- Hyperthreaded
-- 12 processes per node
+We consider three experiment configurations on Raijin: a "default" unconfigured
+setup, hyperthread-enabled runs, and simulations running 12 model processes per
+16-core node (labelled here as "12 PPN" experiments).
 
 
 Fujin
@@ -75,28 +86,32 @@ Fujin is NCI's Fujitsu FX10 cluster consisting of 96 compute nodes, each
 containing a 1.8 GHz 16-core SPARC64 IXfx CPU (ref).  For our investigation,
 numerical experiments were limited to a maximum of 84 nodes or 1344 cores.
 
-The interconnect is a simplified version of Fujitsu's Tofu interconnect and
-consists of 8 "Tofu units", where each unit consists of 12 nodes arranged as a
-3D torus of shape :math:`2 \times 3 \times 2`.
+The interconnect is a streamlined version of the K-Computer's Tofu interconnect
+system, and consists of 8 serially connected "Tofu units". Each unit contains
+12 compute nodes arranged as a 3D torus of shape :math:`2 \times 3 \times 2`.
+Nodes are connected by 10 bidirectional links with 5 Gb/s transfer rates,
+yielding a peak transfer rate of 100 Gb/s, or simultaneous rates of 50 Gb/s,
+between nodes.  Tofu interconnects also include the Tofu barrier hardware
+module for optimised MPI reductions and broadcasts, but we do not use it in
+this study.
 
 When compared to Raijin, the lower clock speed of Fujin's CPUs will necessarily
 result in lower optimal performance for computationally-bound software.
 However, the fixed Tofu interconnect offers the potential for optimized node
 layout and efficient scalability for higher CPU counts.
 
-Other points:
-   - OS platform
-   - Filesystem (FEFS; Lustre fork)
+The operating system platform is based on the Red Hat Enterprise Linux (RHEL)
+Server release 6.1.  Jobs are managed by the scheduler of the Parallelnavi
+suite.  The filesystem is the Fujitsu Exabyte File System (FEFS) v1.3.1, based
+on the Lustre v1.8.5 filesystem.
 
-We consider two configurations on the Tofu network, which we refer to as
-"snake" or "ladder" layouts.  Node placement along a single tofu unit for each
-is shown in Figures 1 and 2.  The snake layout guarantees that all
-communications is exclusively between neighbor nodes, but it also requires that
-each node span an entire latitude line.  The ladder layout relaxes this span
-requirement by allowing us to divide a latitude line across two nodes, but it
-also requires diagonally adjacent messages to pass through non-neighbor nodes.
-
-Note: 1344 jobs have nonuniform tiles.
+We consider two configurations on Fujin, denoted as "snake" or "ladder"
+layouts.  Node placement along a single tofu unit for each is shown in Figures
+1 and 2.  The snake layout guarantees that all communications is exclusively
+between neighbor nodes, but it also requires that each node span an entire
+latitude line.  The ladder layout relaxes this span requirement by allowing us
+to divide a latitude line across two nodes, but it also requires diagonally
+adjacent messages to pass through non-neighbor nodes.
 
 
 Profiling
@@ -141,7 +156,7 @@ using the following formula:
 where :math:`p` is the mean fraction of MPI instructions across all ranks,
 :math:`f` is the CPU clock speed, and :math:`\tau` is the runtime.  This is an
 imperfect estimate, since there may be additional communication costs outside
-of the MPI library (*example??*), but it provides a reasonable approximation of
+of the MPI library, but it provides a reasonable approximation of
 vector calculation efficiency for each platform.
 
 A direct comparison of :math:`N_c` across platforms reveals a notable
@@ -214,11 +229,16 @@ Discussion
 
 Performance difference (compilers, chips, etc)
 
+Tofu barrier
+
 Ocean vs Ice scalability
 
 Concurrent sea ice configuration
 
+Future scalability: weak scaling tests
+
 MIC challenges
+
 
 
 Conclusion
@@ -226,28 +246,42 @@ Conclusion
 
 In this study, we have shown that the global :math:`0.25^\circ` resolution
 ocean-sea ice configurations of the MOM ocean model can run efficiently on both
-x86 PRIMERGY clusters and SPARC FX10 platforms.  On the x86-based Raijin
-computing platform, we are able to simulate over 10 model years per day at a
-reasonably high level of efficiency.  On FX10 Fujin platform, we can simulate
-over 4 model years per day at a similar level of efficiency.
+x86 PRIMERGY and SPARC FX10 platforms.  On the x86-based Raijin system, we are
+able to simulate over 10 model years per day at a reasonably high level of
+efficiency.  On FX10 Fujin platform, we can simulate over 4 model years per day
+at a similar level of efficiency.
 
 In order to achieve a high level of performance on the Raijin platform, we were
-required to either reduce the number of processes per node to 12, leaving
+required to either reduce the number of model processes per node to 12, leaving
 four cores to run idle during the simulation, or to enable hyperthreading on
 our CPUs, allowing two computational threads per core.  Although reducing the
-number of cores achieved a greater level of performance, hyperthreaded offers
-comparable results without any idle cores, and therefore achieving much greater
+number of cores yields a greater level of performance, hyperthreaded runs offer
+comparable results without any idle cores, thereby achieving much greater
 efficiency.  When all 16 cores on each node were used without hyperthreading,
-the runtimes increased by a factor of three and were unable to operate at an
-acceptable level of performance.
+the runtimes increased by a factor of three and were unable to scale beyond 480
+CPUs.
 
-Comparsion of the submodels within the ice-ocean configuration show that the
+Comparison of the submodels within the ice-ocean configuration show that the
 ocean model scales up to 2000 cores with only a negligible loss of efficiency,
 while the sea ice and coupling components cease to scale after 480 CPUs.
-Future efforts to improve the scalability of MOM should therefore target these
+Future efforts to improve the scalability of MOM should target these
 subcomponents.
 
-Both platforms have been proven to be capable of (doing this...)
+Both platforms have been proven to be capable of running global high-resolution
+simulations of the ocean, and provide greater opportunity to investigate the
+impacts of turbulent-scale processes on global climate.  Development towards
+resolutions of :math:`0.1^\circle` and beyond will require further
+investigations of the underlying codes and their resource requirements, and
+ongoing collaborations between industry and the academic research community.
+
+
+Acknowledgements
+================
+
+* NCI facility disclaimar
+* Access-Opt project?
+* Fujitsu engineers?
+* ARCCSS?
 
 
 References
