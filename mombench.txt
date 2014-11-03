@@ -1,5 +1,5 @@
 =================================================================
-Scalability of Global High-Resolution Ocean Simulations using MOM
+Scalability of global high-resolution ocean simulations using MOM
 =================================================================
 
 :Authors:
@@ -12,7 +12,20 @@ Scalability of Global High-Resolution Ocean Simulations using MOM
    Fujitsu Australia Limited, Canberra, Australia (TODO?)
 
 :Abstract:
-   Test test test
+   We investigate the scalability of global :math:`0.25^\circ` resolution
+   ocean-sea ice simulations using the MOM ocean model.  We focus on two major
+   platforms, hosted at the National Computational Infrastructure (NCI)
+   National Facility.  The first is Raijin, an x86-based PRIMERGY cluster with
+   InfiniBand interconnects, and the second is Fujin, a SPARC-based FX10 system
+   using the Tofu interconnect.  We show that such models produces efficient,
+   scalable results on both platforms up to 960 CPUs.  Speeds are notably
+   faster on Raijin when either hyperthreading or fewer cores per node are
+   used.  We also show that the ocean submodel scales up to 1920 CPUs with
+   negligible loss of efficiency, but the sea ice and coupler components
+   quickly become inefficient and represent substantial bottlenecks in future
+   scalability.  Our results show that both platforms offer sufficient
+   performance for future scientific research, and highlight to the challenges
+   for future scalability and optimization.
 
 
 Introduction
