@@ -9,7 +9,7 @@ Scalability of Global High-Resolution Ocean Simulations using MOM
    National Computational Infrastructure, Australian National University,
    Canberra ACT 2601, Australia
 :Organization:
-   Fujitsu Australia (TODO)
+   Fujitsu Australia Limited, Canberra, Australia (TODO?)
 
 :Abstract:
    Test test test
@@ -18,7 +18,7 @@ Scalability of Global High-Resolution Ocean Simulations using MOM
 Introduction
 ============
 
-We study the model
+sigh...
 
 
 Methods
@@ -59,8 +59,7 @@ selected for use in this study.  For other CPU counts, a single simulation was
 used for each configuration.
 
 Diagnostic output consists of 10 three-dimensional and 27 two-dimension fields,
-and is saved to disk every five days.  Although such diagnostic fields can
-occupy a substantial proportion of
+and is saved to disk every five days.  Such diagnostic fields can
 
 
 Raijin
@@ -252,10 +251,11 @@ Platform Comparison
 -------------------
 
 Aside from the general scaling results, the most notable observation in this
-study is the significant discrepancy in performance between the Raijin and Fujin
-platforms.  Given the many substantial differences in the two platforms, it is
-difficult to identify any single cause.  However, it is worthwhile to review
-the major points of difference as considerations for future investigations.
+study is the significant discrepancy in performance between the Raijin and
+Fujin platforms.  Given the many substantial differences in the two platforms,
+it is difficult to identify any single cause.  However, it is worthwhile to
+review the major points of difference as considerations for future
+investigations.
 
 CPU architecture is the most fundamental difference between the two platforms.
 The two CPUs are both capable of 8 floating point operations per cycle.
@@ -270,10 +270,9 @@ were not investigated in this study.  A more accurate comparison of platforms
 would also require a greater uniformity of tools across the platforms.
 
 Another source of potential hardware performance on the FX10 is the Tofu
-barrier acceleration of the ``MPI_Reduce`` and ``MPI_Bcast`` calls.
-Reduction operations are also a dominant part of most diagnostic calculations,
-which were disabled in these experiments.  Improvement of such MPI calls may be
-essential to future scalability.
+barrier acceleration of the ``MPI_Reduce`` and ``MPI_Bcast`` calls.  Reduction
+operations are a dominant part of most diagnostic calculations, and improvement
+of such MPI calls could contribute to further scalability.
 
 Another point of consideration is the increasing trend of nodes with increasing
 numbers of cores, including MIC architectures such as Xeon Phi accelerators.
@@ -288,13 +287,19 @@ future MIC platforms.
 Software
 --------
 
-Ocean vs Ice scalability
+A second major conclusion of this study is the difference in ocean scalability
+versus the ice and coupler submodels. The serial nature of our simulations may
+represent a bottleneck that could be addressed by simulating the sea ice on
+separate cores.  Load balancing would become a greater concern, and a
+separation of ocean and ice would put a greater burden on the MPI communication
+of the coupler.  But given the inability of SIS to scale beyond 480 CPUs, and
+the very large number of sea ice timesteps required per ocean timestep, this
+may become a requirement in the future.
 
-Concurrent sea ice configuration
-
-Future scalability: weak scaling tests
-
-MIC challenges
+Poor scaling of the coupling subroutines also shows that a distribution of
+ocean and sea ice will be be sufficient for future scalability.  A targeted
+investigation of the coupler is also required, and field exchange between
+models must also be a future optimization target.
 
 
 Conclusion
