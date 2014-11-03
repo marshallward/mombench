@@ -5,13 +5,16 @@ Scalability of global high-resolution ocean simulations using MOM
 :Authors:
    - Marshall Ward
    - Yuanyuan Zhang
+
 :Organization:
    National Computational Infrastructure, Australian National University,
    Canberra ACT 2601, Australia
+
 :Organization:
    Fujitsu Australia Limited, Canberra, Australia (TODO?)
 
 :Abstract:
+
    We investigate the scalability of global :math:`0.25^\circ` resolution
    ocean-sea ice simulations using the MOM ocean model.  We focus on two major
    platforms, hosted at the National Computational Infrastructure (NCI)
