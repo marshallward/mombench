@@ -17,26 +17,28 @@ Scalability of global high-resolution ocean simulations using MOM
 
 :Abstract:
 
-   We investigate the scalability of global :math:`0.25^\circ` resolution
-   ocean-sea ice simulations using the MOM ocean model.  We focus on two major
-   platforms, hosted at the National Computational Infrastructure (NCI)
-   National Facility: an x86-based PRIMERGY cluster with InfiniBand
-   interconnects, and a SPARC-based FX10 system using the Tofu interconnect.
-   We show that such models produces efficient, scalable results on both
-   platforms up to 960 CPUs.  Speeds are notably faster on Raijin when either
-   hyperthreading or fewer cores per node are used.  We also show that the
-   ocean submodel scales up to 1920 CPUs with negligible loss of efficiency,
-   but the sea ice and coupler components quickly become inefficient and
-   represent substantial bottlenecks in future scalability.  Our results show
-   that both platforms offer sufficient performance for future scientific
-   research, and highlight to the challenges for future scalability and
-   optimization.
+   We investigate the scalability of global 0.25° resolution ocean-sea ice
+   simulations using the MOM ocean model.  We focus on two major platforms,
+   hosted at the National Computational Infrastructure (NCI) National Facility:
+   an x86-based PRIMERGY cluster with InfiniBand interconnects, and a
+   SPARC-based FX10 system using the Tofu interconnect.  We show that such
+   models produces efficient, scalable results on both platforms up to 960
+   CPUs.  Speeds are notably faster on Raijin when either hyperthreading or
+   fewer cores per node are used.  We also show that the ocean submodel scales
+   up to 1920 CPUs with negligible loss of efficiency, but the sea ice and
+   coupler components quickly become inefficient and represent substantial
+   bottlenecks in future scalability.  Our results show that both platforms
+   offer sufficient performance for future scientific research, and highlight
+   to the challenges for future scalability and optimization.
 
 
 Introduction
 ============
 
-
+Current CMIP-based global climate simulations rely on coarse ocean models of
+approximately 1° resolution, but there is growing demand for a greater
+resolution of the ocean eddy fields, with corresponding resolutions on the
+order of 0.25°
 
 
 Methods
@@ -54,9 +56,8 @@ coupler [#].  The simulations presented here use the MOM 5.1 source code
 release, which includes the SIS and FMS components.
 
 The numerical grid of the ocean and sea ice models is a curvilinear grid with a
-nominal resolution of :math:`0.25^\circ` and contains :math:`1440 \times 1080`
-horizontal grid points.  The ocean and sea ice models use 50 and 6 vertical
-levels, respectively.
+nominal resolution of 0.25° and contains 1440 × 1080 horizontal grid points.  The
+ocean and sea ice models use 50 and 6 vertical levels, respectively.
 
 Parallelisation is achieved by decomposing the horizontal grid into tiles of
 equal size, with additional halo grid points surrounding each tile.  For each
@@ -119,11 +120,11 @@ numerical experiments were limited to a maximum of 84 nodes, or 1344 cores.
 
 The interconnect is a streamlined version of the K-Computer's Tofu interconnect
 system, and consists of 8 serially connected *Tofu units*. Each unit contains
-12 compute nodes arranged as a 3D torus of shape :math:`2 \times 3 \times 2`.
-Nodes are connected by 10 bidirectional links with 5 Gb/s transfer rates,
-yielding a peak transfer rate of 100 Gb/s between nodes.  Tofu interconnects
-also include the *Tofu barrier* hardware module for optimised MPI reductions and
-broadcasts, but we do not use it in
+12 compute nodes arranged as a 3D torus of shape 2 × 3 × 2.  Nodes are connected by
+10 bidirectional links with 5 Gb/s transfer rates, yielding a peak transfer
+rate of 100 Gb/s between nodes.  Tofu interconnects also include the *Tofu
+barrier* hardware module for optimised MPI reductions and broadcasts, but we do
+not use it in
 this study.
 
 When compared to Raijin, the lower clock speed of Fujin's CPUs will necessarily
@@ -313,12 +314,12 @@ field exchange between models must be a target of future optimisation efforts.
 Conclusion
 ==========
 
-We have shown that the global :math:`0.25^\circ` resolution ocean-sea ice
-configurations of the MOM ocean model can run efficiently on both x86 PRIMERGY
-and SPARC FX10 platforms.  On the x86-based Raijin system, we were able to
-simulate over 10 model years per day at a sufficiently high level of
-efficiency.  On the FX10 Fujin platform, we can simulate over 4 model years per
-day at a similar level of efficiency.
+We have shown that the global 0.25° resolution ocean-sea ice configurations of
+the MOM ocean model can run efficiently on both x86 PRIMERGY and SPARC FX10
+platforms.  On the x86-based Raijin system, we were able to simulate over 10
+model years per day at a sufficiently high level of efficiency.  On the FX10
+Fujin platform, we can simulate over 4 model years per day at a similar level
+of efficiency.
 
 In order to achieve a high level of performance on the Raijin platform, we were
 required to either reduce the number of model processes per node to 12, leaving
@@ -339,9 +340,9 @@ subcomponents.
 Both platforms have proven capable of running global high-resolution
 simulations of the ocean, and both provide greater opportunity to investigate
 the impacts of turbulent-scale processes on global climate.  Development
-towards resolutions of :math:`0.1^\circ` and beyond will require further
-investigations of the underlying codes and their resource requirements, and
-ongoing collaborations between industry and the academic research community.
+towards resolutions of 0.1° and beyond will require further investigations of
+the underlying codes and their resource requirements, and ongoing
+collaborations between industry and the academic research community.
 
 
 Acknowledgements
