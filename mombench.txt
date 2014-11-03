@@ -18,17 +18,17 @@ Scalability of global high-resolution ocean simulations using MOM
    We investigate the scalability of global :math:`0.25^\circ` resolution
    ocean-sea ice simulations using the MOM ocean model.  We focus on two major
    platforms, hosted at the National Computational Infrastructure (NCI)
-   National Facility.  The first is Raijin, an x86-based PRIMERGY cluster with
-   InfiniBand interconnects, and the second is Fujin, a SPARC-based FX10 system
-   using the Tofu interconnect.  We show that such models produces efficient,
-   scalable results on both platforms up to 960 CPUs.  Speeds are notably
-   faster on Raijin when either hyperthreading or fewer cores per node are
-   used.  We also show that the ocean submodel scales up to 1920 CPUs with
-   negligible loss of efficiency, but the sea ice and coupler components
-   quickly become inefficient and represent substantial bottlenecks in future
-   scalability.  Our results show that both platforms offer sufficient
-   performance for future scientific research, and highlight to the challenges
-   for future scalability and optimization.
+   National Facility: an x86-based PRIMERGY cluster with InfiniBand
+   interconnects, and a SPARC-based FX10 system using the Tofu interconnect.
+   We show that such models produces efficient, scalable results on both
+   platforms up to 960 CPUs.  Speeds are notably faster on Raijin when either
+   hyperthreading or fewer cores per node are used.  We also show that the
+   ocean submodel scales up to 1920 CPUs with negligible loss of efficiency,
+   but the sea ice and coupler components quickly become inefficient and
+   represent substantial bottlenecks in future scalability.  Our results show
+   that both platforms offer sufficient performance for future scientific
+   research, and highlight to the challenges for future scalability and
+   optimization.
 
 
 Introduction
@@ -43,39 +43,36 @@ Methods
 Numerical Model
 ---------------
 
-The experiment used in this analysis is a global ocean-sea ice model used in
-Spence et al. (2014), which was based on the Geophysical Fluid Dynamics
-Laboratory (GFDL) CM2.5 model (Delworth et al., 2012).  The numerical submodels
-are the Modular Ocean Model (MOM) and the Sea Ice Simulator (SIS), built from
-the Flexible Modeling System (FMS) framework, which also includes the ocean-ice
-coupler.  The simulations presented here use the MOM 5.1 source code release,
-which includes the SIS and FMS components.
+The experiment used in this study is the global ocean-sea ice model of Spence
+et al. (2014) [#], which was based on the Geophysical Fluid Dynamics Laboratory
+(GFDL) CM2.5 model (Delworth et al., 2012) [#].  The numerical submodels are
+the Modular Ocean Model (MOM) and the Sea Ice Simulator (SIS), built from the
+Flexible Modeling System (FMS) framework, which also includes the ocean-ice
+coupler [#].  The simulations presented here use the MOM 5.1 source code
+release, which includes the SIS and FMS components.
 
-The mode is forced by external atmospheric fields from the corrected Normal
-Year Forcing of the Coordinated Ocean-ice Reference Experiment (CORE) datasets
-(Griffies et al., 2009, Large and Yeager, 2009).
+The numerical grid of the ocean and sea ice models is a curvilinear grid with a
+nominal resolution of :math:`0.25^\circ` and contains :math:`1440 \times 1080`
+horizontal grid points.  The ocean and sea ice models use 50 and 6 vertical
+levels, respectively.
 
-The numerical grid of the ocean and sea ice models contains 1440 x 1080
-horizontal grid points.  The grid is a hybrid tripolar-Mercator-spherical grid
-with a nominal resolution of :math:`0.25^\circ`.  The ocean and sea ice models
-use 50 and 6 vertical levels, respectively.
+Parallelisation is achieved by decomposing the horizontal grid into tiles of
+equal size, with additional halo grid points surrounding each tile.  For each
+timestep, the halos of adjacent and diagonally adjacent tiles are updated,
+requiring 8 messages per field.
 
-Parallelisation is achieved by decomposing the computational domain into tiles
-of equal size, with a halo of one grid spacing.  For each timestep, the halos
-of adjacent and diagonally adjacent tiles are updated, requiring 8 messages per
-field.
-
-Standard experiments are run for one month, using 1488 timesteps of size 1800
-s.  Each ocean timestep requires 72 sea ice timesteps.  A longer simulation
-time was chosen to represent a typical integration time for scientific
-analysis, and to reduce the statistical variability of our
+Standard experiments are run for 31 days, using 1488 timesteps of 1800 s
+resolution.  Each ocean timestep requires 72 additional sea ice timesteps.  A
+longer simulation time was chosen to represent a typical integration time for
+scientific analysis, and to reduce any statistical variability of the observed
 walltimes.  Simulations using 960 CPUs were run three times to confirm the
-reproducibility of the results, and the run based on median walltime was
-selected for use in this study.  For other CPU counts, a single simulation was
-used for each configuration.
+reproducibility of the results, and the median walltimes was used to select the
+run in this study.  For all other runs, a single simulation was used for each
+configuration.
 
-Diagnostic output consists of 10 three-dimensional and 27 two-dimension fields,
-and is saved to disk every five days.  Such diagnostic fields can
+Diagnostic output consists of 4 three-dimensional fields, which are saved to
+disk after every 5 days.  This output rate was chosen to reflect a comparable
+rate of scientific value while also not overshadowing the model calculations.
 
 
 Raijin
@@ -84,46 +81,47 @@ Raijin
 Raijin is the principal supercomputer of the National Computational
 Infrastructure (NCI) National Facility in Australia.  It is a Fujitsu PRIMERGY
 cluster comprised of 3592 computing nodes, with each containing two 2.6 GHz
-8-core Intel Xeon Sandy Bridge (E5-2670) CPUs (ref), with a total core
+8-core Intel Xeon Sandy Bridge (E5-2670) CPUs [#], with a total core
 count of 57472.  Operational nodes have approximately 32 GiB of memory, with
 more memory available on selected nodes.
 
 The cluster network uses InfiniBand FDR-14 interconnects, which provide peak
 (4x aggregate) transfer speeds up to 54 Gb/s between nodes.  The network uses a
-two-level fat tree configuration, with 72 nodes (one rack) on each switch, each
-connected to a top-level director switch.  Although it is possible to run jobs
-up to 1152 CPUs on a single rack, the high usage rate of Raijin tends to
-prevent such layouts.  We assume that all experiments in this study depend on
-the director switch.
+two-level fat tree configuration, with 72 nodes (one rack) on each switch, and
+each rack connected to a top-level director switch.  Although it is possible to
+run jobs up to 1152 CPUs on a single rack, the high usage rate of Raijin tends
+to prevent such layouts.  We assume that all experiments in this study depend
+on the director switch.
 
 The operating system platform is CentOS 6.5, which uses the Linux 2.6.32
 kernel.  Jobs are managed using the PBSPro scheduler, and files are kept under
-a Lustre v2.5 filesystem.
+a Lustre 2.5 filesystem.
 
-We use the Intel Compiler Suite v14.3.172 for model compilation.  MPI
-communication uses Open MPI v1.8.2 and data IO uses NetCDF v4.3.0, which was
-built using HDF5 v1.8.10.  The model is built with the ``-O2`` and ``--xhost``
+We use the Intel Compiler Suite 14.3.172 for model compilation.  MPI
+communication uses Open MPI 1.8.2 and data IO uses NetCDF 4.3.0, which was
+built using HDF5 1.8.10.  The model is built with the ``-O2`` and ``--xhost``
 optimisation flags.
 
-We consider three experiment configurations on Raijin: a "default" unconfigured
-setup, hyperthread-enabled runs, and simulations running 12 model processes per
-16-core node (herein labelled as "12 PPN" experiments).
+We consider three experiment configurations on Raijin: a standard configuration
+using 16 model processes per node (herein "default"), a similar configuration
+using hyperthreaded cores, and a third configuration running 12 model processes
+per node (herein "12 PPN").
 
 
 Fujin
 -----
 
 Fujin is NCI's Fujitsu FX10 cluster consisting of 96 compute nodes, each
-containing a 1.8 GHz 16-core SPARC64 IXfx CPU (ref).  For our investigation,
-numerical experiments were limited to a maximum of 84 nodes or 1344 cores.
+containing a 1.8 GHz 16-core SPARC64 IXfx CPU [#].  For our investigation,
+numerical experiments were limited to a maximum of 84 nodes, or 1344 cores.
 
 The interconnect is a streamlined version of the K-Computer's Tofu interconnect
-system, and consists of 8 serially connected "Tofu units". Each unit contains
+system, and consists of 8 serially connected *Tofu units*. Each unit contains
 12 compute nodes arranged as a 3D torus of shape :math:`2 \times 3 \times 2`.
 Nodes are connected by 10 bidirectional links with 5 Gb/s transfer rates,
-yielding a peak transfer rate of 100 Gb/s, or simultaneous rates of 50 Gb/s,
-between nodes.  Tofu interconnects also include the Tofu barrier hardware
-module for optimised MPI reductions and broadcasts, but we do not use it in
+yielding a peak transfer rate of 100 Gb/s between nodes.  Tofu interconnects
+also include the *Tofu barrier* hardware module for optimised MPI reductions and
+broadcasts, but we do not use it in
 this study.
 
 When compared to Raijin, the lower clock speed of Fujin's CPUs will necessarily
@@ -132,28 +130,28 @@ However, the fixed Tofu interconnect offers the potential for optimized node
 layout and efficient scalability for higher CPU counts.
 
 The operating system platform is based on the Red Hat Enterprise Linux (RHEL)
-Server release 6.1.  Jobs are managed by the scheduler of the Parallelnavi
-suite.  The filesystem is the Fujitsu Exabyte File System (FEFS) v1.3.1, based
-on the Lustre v1.8.5 filesystem.
+Server release 6.1, also based on the Linux 2.6.32 kernel.  Jobs are managed by
+the scheduler of the Parallelnavi suite.  The filesystem is the Fujitsu Exabyte
+File System (FEFS) 1.3.1, which is based on the Lustre 1.8.5 filesystem.
 
-The model is compiled using the Fujitsu compiler suite v1.2.1, which includes
-Fujitsu's MPI library.  Data IO uses NetCDF 4.3.2, built with HDF5 1.8.12 and
-NetCDF-Fortran 4.2.  The model is compiled using the `-Kfast`, `-Kocl`, and
-`-O2` optimization flags.
+The model is compiled using the Fujitsu compiler suite 1.2.1, which includes
+Fujitsu's MPI library, which is based on Open MPI 1.4.3.  Data IO uses NetCDF
+4.3.2, built with HDF5 1.8.12 and NetCDF-Fortran 4.2.  The model is compiled
+using the ``-Kfast``, ``-Kocl``, and ``-O2`` optimization flags.
 
-We consider two configurations on Fujin, denoted as "snake" or "ladder"
-layouts.  Node placement along a single tofu unit for each is shown in Figures
-1 and 2.  The snake layout guarantees that all communications is exclusively
-between neighbor nodes, but it also requires that each node span an entire
-latitude line.  The ladder layout relaxes this span requirement by allowing us
-to divide a latitude line across two nodes, but it also requires diagonally
-adjacent messages to pass through non-neighbor nodes.
+We consider two configurations on Fujin, denoted as *snake* and *ladder*
+layouts.  Node placement for a single Tofu unit for each is illustrated in
+Figure 1.  The snake layout guarantees that all communications is exclusively
+between neighbour nodes, but also requires that each node span an entire
+latitude line.  The ladder layout divides each latitude line across two nodes,
+allowing for smaller tile widths, but it also requires diagonally adjacent
+tiles to send data through non-neighbour nodes.
 
 
 Profiling
 ---------
 
-We use the IPM v2.0.2 profiler to construct basic runtime statistics.  Model
+We use the IPM 2.0.2 profiler to construct basic runtime statistics.  Model
 runtimes, memory usage per CPU rank, and MPI runtimes are based on IPM output
 logs.
 
