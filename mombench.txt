@@ -4,7 +4,9 @@ Scalability of global high-resolution ocean simulations using MOM
 
 :Authors:
    - Marshall Ward
+     marshall.ward@anu.edu.au
    - Yuanyuan Zhang
+     yuanyuan.zhang@au.fujitsu.com
 
 :Organization:
    National Computational Infrastructure, Australian National University,
@@ -349,6 +351,8 @@ This research was undertaken with the assistance of resources from the National
 Computational Infrastructure (NCI), which is supported by the Australian
 Government.
 
+TODO?
+
 * Access-Opt project?
 * Fujitsu engineers?
 * ARCCSS?
@@ -361,12 +365,12 @@ References
   by poleward shifting winds (Spence et al.)
 
 
-Figures
-=======
+.. figure:: figures/snake.svg
 
-..
-   image:: figures/snake.pdf
-   image:: figures/ladder.pdf
-   image:: figures/platform.pdf
-   image:: figures/scaling.pdf
-   image:: figures/submodels.pdf
+.. figure:: figures/ladder.svg
+
+.. figure:: figures/platform.svg
+
+.. figure:: figures/scaling.svg
+
+.. figure:: figures/submodels.svg
