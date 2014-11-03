@@ -76,7 +76,7 @@ optimisation flags.
 
 We consider three experiment configurations on Raijin: a "default" unconfigured
 setup, hyperthread-enabled runs, and simulations running 12 model processes per
-16-core node (labelled here as "12 PPN" experiments).
+16-core node (herein labelled as "12 PPN" experiments).
 
 
 Fujin
@@ -104,6 +104,11 @@ The operating system platform is based on the Red Hat Enterprise Linux (RHEL)
 Server release 6.1.  Jobs are managed by the scheduler of the Parallelnavi
 suite.  The filesystem is the Fujitsu Exabyte File System (FEFS) v1.3.1, based
 on the Lustre v1.8.5 filesystem.
+
+The model is compiled using the Fujitsu compiler suite v1.2.1, which includes
+Fujitsu's MPI library.  Data IO uses NetCDF 4.3.2, built with HDF5 1.8.12 and
+NetCDF-Fortran 4.2.  The model is compiled using the `-Kfast`, `-Kocl`, and
+`-O2` optimization flags.
 
 We consider two configurations on Fujin, denoted as "snake" or "ladder"
 layouts.  Node placement along a single tofu unit for each is shown in Figures
@@ -227,6 +232,11 @@ TODO?
 Discussion
 ==========
 
+Aside from the general scaling results, the most notable observation in this
+study is the significant discrepancy in performance between the Raijin and Fujin
+platforms.  Given the many substantial differences in the two platforms, it is
+difficult to identify any single cause.
+
 Performance difference (compilers, chips, etc)
 
 Tofu barrier
@@ -270,7 +280,7 @@ subcomponents.
 Both platforms have been proven to be capable of running global high-resolution
 simulations of the ocean, and provide greater opportunity to investigate the
 impacts of turbulent-scale processes on global climate.  Development towards
-resolutions of :math:`0.1^\circle` and beyond will require further
+resolutions of :math:`0.1^\circ` and beyond will require further
 investigations of the underlying codes and their resource requirements, and
 ongoing collaborations between industry and the academic research community.
 
