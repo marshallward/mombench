@@ -152,7 +152,7 @@ Profiling
 ---------
 
 We use the IPM 2.0.2 profiler to construct basic runtime statistics.  Model
-runtimes, memory usage per CPU rank, and MPI runtimes are based on IPM output
+runtime, memory usage per CPU rank, and MPI runtimes are based on IPM output
 logs.
 
 Submodel runtimes are provided by the internal timers of the MOM ocean model,
@@ -166,12 +166,12 @@ Results
 Platform Configuration
 ----------------------
 
-Figure 1a shows the total runtime for a 480-CPU experiment across different
+Figure 2a shows the total runtime for a 480-CPU experiment across different
 hardware platforms and configurations.  The configuration choice on Raijin had
 a major impact on performance, with observed speedups of 1.28 and 1.60 for
-hyperthreaded and 12 process-per-node experiments, respectively.  Process
-layout on Fujin had an observable but less notable impact, with the "snake"
-layout achieving a 1.15 speedup in comparison to the "ladder" layout.
+hyperthreaded and 12 PPN experiments, respectively.  Process
+layout on Fujin had an observable but less notable impact, with the snake
+layout achieving a 1.15 speedup in comparison to the ladder layout.
 
 Experiment runtimes on Raijin are faster than on Fujin, with the fastest runs
 on Raijin outperforming the Fujin jobs by more than a factor of two.  Much of
@@ -179,9 +179,9 @@ this difference in performance can be attributed to the clock speeds of the two
 platforms.  However, the clock speed ratio of the Raijin and Fujin CPUs is only
 1.41, and cannot alone account for the differences in performance.
 
-Figure 1b attempts to clarify this performance difference across the platforms
+Figure 2b attempts to clarify this performance difference across the platforms
 by estimating the mean number of concurrent computational instructions per CPU
-using the following formula:
+with the following formula:
 
 .. math::
 
@@ -191,71 +191,63 @@ where :math:`p` is the mean fraction of MPI instructions across all ranks,
 :math:`f` is the CPU clock speed, and :math:`\tau` is the runtime.  This is an
 imperfect estimate, since there may be additional communication costs outside
 of the MPI library, but it provides a reasonable approximation of
-vector calculation efficiency for each platform.
+vector calculation efficiency of each platform.
 
 A direct comparison of :math:`N_c` across platforms reveals a notable
 difference in the computational efficiency between the platforms, with Fujin
 experiments requiring approximately 50% more non-communication cycles than
-Raijin.  Numerous other factors, particularly related to the underlying
-software, make it difficult to make further comparisons.
+Raijin.
 
 
 Scaling
 -------
 
 The general performance and scalability of each experiment across different
-CPUs is shown in Figure 2.  The general trend discussed in the previous section
-is also observed in Figure 2a, with simulations on Raijin generally
-outperforming those on Fujin.  Hyperthreaded and 12 process-per-node jobs
-continue to outperform the default runs on Raijin, and "snake" layouts
-outperform "ladder" layouts on Fujin.
+CPUs is shown in Figure 3.  The general trends shown in the previous section
+are also observed in Figure 3a, with simulations on Raijin generally
+outperforming those on Fujin.  Hyperthreaded and 12 PPN jobs continue to
+outperform the default runs on Raijin, and snake layouts outperform ladder
+layouts on Fujin.
 
-The most notable observation is the dramatic loss of performance of experiments
-on Raijin using the default configuration, where scalability begins to diminish
-at 480 CPUs and walltimes begin to reverse trend and increase after 960 CPUs.
-Scalability is restored by either using hyperthreading or by using fewer cores,
-indicating the presence of a computational bottleneck related to process
-threads.
+The most notable observation is the dramatic loss of performance of the default
+experiments on Raijin, where scalability begins to diminish at 480 CPUs and
+walltimes begin to increase after 960 CPUs.  Scalability is restored by either
+introducing hyperthreading or by using fewer cores, indicating the presence of
+a computational bottleneck related to the number of processes per node.
 
-The relative efficiency of each configuration is shown in Figure 2b, which is
+The relative efficiency of each configuration is shown in Figure 3b, which is
 computed as
 
 .. math::
 
-   \epsilon = \frac{n_r \tau_r} {n \tau_n}
+   \varepsilon = \frac{n_r \tau_r} {n \tau_n}
 
 where :math:`n` is the number of CPUs, :math:`\tau_n` is the runtime using
 :math:`n` CPUs, and :math:`r` is the reference experiment, which is 240 CPUs
-for all configurations except the "ladder" Fujin runs, which use 255 CPUs.
+for all configurations except the ladder Fujin runs, which use 255 CPUs.
 
-Figure 2b shows that, with the exception of the default Raijin setup, all runs
+Figure 3b shows that, with the exception of the default Raijin setup, all runs
 demonstrate scalable performance up to 960 CPUs and maintain an efficiency
 greater than 80%.  Experiments on Raijin scale slightly better than on Fujin,
-although the results are remains comparable over all platforms and
-configurations.  Beyond 960 CPUs, all experiments begin to drop substantially
-and no longer provide a reasonable level of performance.
+although the results are comparable over all platforms and configurations.
+Beyond 960 CPUs, all experiments begin to drop substantially and no longer
+provide a reasonable level of performance.
 
-This performance can be further clarified by investigating the scalability of
-the respective submodels, as shown in Figure 3.  Figure 3a shows that, despite
+Model performance can be further clarified by investigating the scalability of
+the respective submodels, as shown in Figure 4.  Figure 4a shows that, despite
 a reduction of general scalability around 960 CPUs, the ocean submodel
 continues to scale efficiently to 1920 CPUs.  However, the sea ice and coupling
-model subcomponents, shown in Figures 3b and 3c, grow progressively worse in
-performance as the number of CPUs increase, indicating that the major
-bottlenecks are due to the sea ice model and submodel flux exchange.
+model subcomponents, shown in Figures 4b and 4c, grow progressively worse in
+performance as the number of CPUs increase, indicating major bottlenecks in the
+sea ice model and submodel flux exchange components.
 
 There is some evidence of improved efficiency in the ocean model, particularly
-on the Fujin experiments, suggesting that the communication bottlenecks in the
-sea ice and coupler models also release additional resources for the ocean
-model.
+in the Fujin experiments, suggesting that the communication bottlenecks in the
+sea ice and coupler models may also be freeing additional resources for the
+ocean model.
 
 Scaling efficiency on Fujin appears to be better than Raijin for the ocean
-model, although it is notably lower in the other components.
-
-
-Profiling
----------
-
-TODO?
+model, although it is notably lower in the other model components.
 
 
 Discussion
@@ -267,70 +259,70 @@ Platform Comparison
 Aside from the general scaling results, the most notable observation in this
 study is the significant discrepancy in performance between the Raijin and
 Fujin platforms.  Given the many substantial differences in the two platforms,
-it is difficult to identify any single cause.  However, it is worthwhile to
-review the major points of difference as considerations for future
-investigations.
+it is difficult to attribute it to any single cause.  However, we review some
+of the major points of difference here as potential targets of future
+investigation.
 
 CPU architecture is the most fundamental difference between the two platforms.
-The two CPUs are both capable of 8 floating point operations per cycle.
-However, the Xeon CPUs on Raijin also include an additional 256 kiB L2 cache on
-each core, inbetween the local L1 case and shared L3 cache.  The absence of
-this intermediate cache on Fujin's SPARC IX could cause a greater sensitivity
-to cache misses and interrupt the computational pipeline.
+The CPUs operate at different clock speeds, but each is capable of performing 8
+floating point operations per cycle.  However, the Xeon CPUs on Raijin also
+include an additional L2 cache on each core inbetween the local L1 case and
+shared L3 cache.  The absence of this intermediate cache on Fujin's SPARC IXfx
+CPUs could cause a greater sensitivity to cache misses and interrupt the
+performance of the computational pipeline.
 
-Another crucial difference in our simulations is the respective compilers used
-on each platform.  Both compilers include a range of tuning parameters which
-were not investigated in this study.  A more accurate comparison of platforms
-would also require a greater uniformity of tools across the platforms.
+Another crucial difference is the specific compilers used on each platform.
+Both compilers include a range of tuning parameters which were not investigated
+in this study.  A more accurate comparison of platforms would also require a
+greater uniformity of compiler settings.
 
-Another source of potential hardware performance on the FX10 is the Tofu
-barrier acceleration of the ``MPI_Reduce`` and ``MPI_Bcast`` calls.  Reduction
-operations are a dominant part of most diagnostic calculations, and improvement
-of such MPI calls could contribute to further scalability.
+An additional opportunity for improved hardware performance on the FX10 is the
+Tofu barrier acceleration of any MPI reduction or broadcast calls.  Such
+operations are a dominant part of most diagnostic calculations, and could
+become crucial in future simulations with high levels of diagnostic output.
 
-Another point of consideration is the increasing trend of nodes with increasing
-numbers of cores, including MIC architectures such as Xeon Phi accelerators.
+Another point of consideration is the increasing trend of greater numbers of
+cores on each node, including MIC architectures such as Xeon Phi accelerators.
 Although Raijin outperformed Fujin in runtime, scalability was not possible
 without either reducing the number of cores or the introduction of
 hyperthreads.  No such additional compromise was required to achieve scalable
-results on Fujin.  Unless we can identify and resolve the underlying resource
-bottleneck on Raijin, it may not be possible to run such models efficiently on
-future MIC platforms.
+results on Fujin.  Future efforts to improve scalability must identify and
+resolve this underlying resource bottleneck.
 
 
-Software
---------
+Submodel Performance
+--------------------
 
 A second major conclusion of this study is the difference in ocean scalability
-versus the ice and coupler submodels. The serial nature of our simulations may
-represent a bottleneck that could be addressed by simulating the sea ice on
-separate cores.  Load balancing would become a greater concern, and a
-separation of ocean and ice would put a greater burden on the MPI communication
-of the coupler.  But given the inability of SIS to scale beyond 480 CPUs, and
-the very large number of sea ice timesteps required per ocean timestep, this
-may become a requirement in the future.
+versus the ice and coupler submodels. Running the ocean and sea ice serially on
+each process is a potential bottleneck that could be addressed by moving the
+sea ice calculations onto separate core.  Load balancing would become a greater
+concern, and a separation of ocean and ice would put a greater burden on the
+the coupler.  But given the inability of SIS to scale beyond 480 CPUs, and the
+very large number of sea ice timesteps required per ocean timestep, this may
+become a requirement in the future.
 
-Poor scaling of the coupling subroutines also shows that a distribution of
-ocean and sea ice will be be sufficient for future scalability.  A targeted
-investigation of the coupler is also required, and field exchange between
-models must also be a future optimization target.
+The poor scalability of the coupling subroutines also shows that a distribution
+of ocean and sea ice will not alone be sufficient to achieve future
+scalability.  A targeted investigation of the coupler is also required, and
+field exchange between models must be a target of future optimisation efforts.
 
 
 Conclusion
 ==========
 
-In this study, we have shown that the global :math:`0.25^\circ` resolution
-ocean-sea ice configurations of the MOM ocean model can run efficiently on both
-x86 PRIMERGY and SPARC FX10 platforms.  On the x86-based Raijin system, we are
-able to simulate over 10 model years per day at a reasonably high level of
-efficiency.  On FX10 Fujin platform, we can simulate over 4 model years per day
-at a similar level of efficiency.
+We have shown that the global :math:`0.25^\circ` resolution ocean-sea ice
+configurations of the MOM ocean model can run efficiently on both x86 PRIMERGY
+and SPARC FX10 platforms.  On the x86-based Raijin system, we were able to
+simulate over 10 model years per day at a sufficiently high level of
+efficiency.  On the FX10 Fujin platform, we can simulate over 4 model years per
+day at a similar level of efficiency.
 
 In order to achieve a high level of performance on the Raijin platform, we were
 required to either reduce the number of model processes per node to 12, leaving
 four cores to run idle during the simulation, or to enable hyperthreading on
 our CPUs, allowing two computational threads per core.  Although reducing the
-number of cores yields a greater level of performance, hyperthreaded runs offer
+number of cores yields a greater level of performance, hyperthreaded runs yield
 comparable results without any idle cores, thereby achieving much greater
 efficiency.  When all 16 cores on each node were used without hyperthreading,
 the runtimes increased by a factor of three and were unable to scale beyond 480
@@ -342,10 +334,10 @@ while the sea ice and coupling components cease to scale after 480 CPUs.
 Future efforts to improve the scalability of MOM should target these
 subcomponents.
 
-Both platforms have been proven to be capable of running global high-resolution
-simulations of the ocean, and provide greater opportunity to investigate the
-impacts of turbulent-scale processes on global climate.  Development towards
-resolutions of :math:`0.1^\circ` and beyond will require further
+Both platforms have proven capable of running global high-resolution
+simulations of the ocean, and both provide greater opportunity to investigate
+the impacts of turbulent-scale processes on global climate.  Development
+towards resolutions of :math:`0.1^\circ` and beyond will require further
 investigations of the underlying codes and their resource requirements, and
 ongoing collaborations between industry and the academic research community.
 
