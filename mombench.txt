@@ -260,8 +260,7 @@ References
 Figures
 =======
 
-.. image:: figures/platform.pdf
-
-.. image:: figures/scaling.pdf
-
-.. image:: figures/submodels.pdf
+..
+   image:: figures/platform.pdf
+   image:: figures/scaling.pdf
+   image:: figures/submodels.pdf
