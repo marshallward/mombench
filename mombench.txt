@@ -35,10 +35,27 @@ Scalability of global high-resolution ocean simulations using MOM
 Introduction
 ============
 
-Current CMIP-based global climate simulations rely on coarse ocean models of
-approximately 1° resolution, but there is growing demand for a greater
-resolution of the ocean eddy fields, with corresponding resolutions on the
-order of 0.25°
+Current global climate simulations, such as the CMIP studies,
+rely on coarse ocean models of approximately 1° resolution, but there is
+growing demand for a greater resolution of the ocean eddy fields, with
+corresponding resolutions on the order of 0.25° or 0.1°. Along with the
+scientific challenges, such simulations will place an increased demand on
+available computing resources, with computational needs and resulting data
+output expected to grow by several hundreds of times in size over the next
+decade.
+
+Although atmosphere and ocean models have steadily increased in resolution over
+the decades, the much stronger stratification of the ocean causes its most
+turbulent scales to emerge at much smaller scales, and have been absent in most
+climate modelling efforts [#].  Such turbulent processes are expected to have a
+major role the maintenance of the ocean's strongest currents such as the ACC,
+and in the vertical mixing and stratification of the ocean [#].
+
+Despite the many scientific challenges of high-resolution climate modelling, a
+major impediment in the adoption of greater resolutions in the ocean is the
+significant computational cost.
+
+This paper is a
 
 
 Methods
