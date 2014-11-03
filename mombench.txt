@@ -2,6 +2,18 @@
 Scalability of Global High-Resolution Ocean Simulations using MOM
 =================================================================
 
+:Authors:
+   - Marshall Ward
+   - Yuanyuan Zhang
+:Organization:
+   National Computational Infrastructure, Australian National University,
+   Canberra ACT 2601, Australia
+:Organization:
+   Fujitsu Australia (TODO)
+
+:Abstract:
+   Test test test
+
 
 Introduction
 ============
@@ -19,7 +31,7 @@ The experiment used in this analysis is a global ocean-sea ice model used in
 Spence et al. (2014), which was based on the Geophysical Fluid Dynamics
 Laboratory (GFDL) CM2.5 model (Delworth et al., 2012).  The numerical submodels
 are the Modular Ocean Model (MOM) and the Sea Ice Simulator (SIS), built from
-the Flexible Modeling System (FMS) framework, which includes the ocean-ice
+the Flexible Modeling System (FMS) framework, which also includes the ocean-ice
 coupler.  The simulations presented here use the MOM 5.1 source code release,
 which includes the SIS and FMS components.
 
@@ -37,14 +49,18 @@ of equal size, with a halo of one grid spacing.  For each timestep, the halos
 of adjacent and diagonally adjacent tiles are updated, requiring 8 messages per
 field.
 
-Standard experiments are run for one month using an 1800s timestep, or 1488
-ocean timesteps.  Each ocean timestep requires 72 sea ice timesteps.  A longer
-simulation time was chosen to represent a typical integration time for
-scientific analysis, and to reduce the statistical variability of our
+Standard experiments are run for one month, using 1488 timesteps of size 1800
+s.  Each ocean timestep requires 72 sea ice timesteps.  A longer simulation
+time was chosen to represent a typical integration time for scientific
+analysis, and to reduce the statistical variability of our
 walltimes.  Simulations using 960 CPUs were run three times to confirm the
 reproducibility of the results, and the run based on median walltime was
 selected for use in this study.  For other CPU counts, a single simulation was
 used for each configuration.
+
+Diagnostic output consists of 10 three-dimensional and 27 two-dimension fields,
+and is saved to disk every five days.  Although such diagnostic fields can
+occupy a substantial proportion of
 
 
 Raijin
@@ -65,7 +81,7 @@ up to 1152 CPUs on a single rack, the high usage rate of Raijin tends to
 prevent such layouts.  We assume that all experiments in this study depend on
 the director switch.
 
-The operating system platform is CentOS 6.5, itself based on the Linux 2.6.32
+The operating system platform is CentOS 6.5, which uses the Linux 2.6.32
 kernel.  Jobs are managed using the PBSPro scheduler, and files are kept under
 a Lustre v2.5 filesystem.
 
@@ -318,7 +334,10 @@ ongoing collaborations between industry and the academic research community.
 Acknowledgements
 ================
 
-* NCI facility disclaimar
+This research was undertaken with the assistance of resources from the National
+Computational Infrastructure (NCI), which is supported by the Australian
+Government.
+
 * Access-Opt project?
 * Fujitsu engineers?
 * ARCCSS?
