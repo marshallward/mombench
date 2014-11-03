@@ -232,14 +232,45 @@ TODO?
 Discussion
 ==========
 
+Platform Comparison
+-------------------
+
 Aside from the general scaling results, the most notable observation in this
 study is the significant discrepancy in performance between the Raijin and Fujin
 platforms.  Given the many substantial differences in the two platforms, it is
-difficult to identify any single cause.
+difficult to identify any single cause.  However, it is worthwhile to review
+the major points of difference as considerations for future investigations.
 
-Performance difference (compilers, chips, etc)
+CPU architecture is the most fundamental difference between the two platforms.
+The two CPUs are both capable of 8 floating point operations per cycle.
+However, the Xeon CPUs on Raijin also include an additional 256 kiB L2 cache on
+each core, inbetween the local L1 case and shared L3 cache.  The absence of
+this intermediate cache on Fujin's SPARC IX could cause a greater sensitivity
+to cache misses and interrupt the computational pipeline.
 
-Tofu barrier
+Another crucial difference in our simulations is the respective compilers used
+on each platform.  Both compilers include a range of tuning parameters which
+were not investigated in this study.  A more accurate comparison of platforms
+would also require a greater uniformity of tools across the platforms.
+
+Another source of potential hardware performance on the FX10 is the Tofu
+barrier acceleration of the ``MPI_Reduce`` and ``MPI_Bcast`` calls.
+Reduction operations are also a dominant part of most diagnostic calculations,
+which were disabled in these experiments.  Improvement of such MPI calls may be
+essential to future scalability.
+
+Another point of consideration is the increasing trend of nodes with increasing
+numbers of cores, including MIC architectures such as Xeon Phi accelerators.
+Although Raijin outperformed Fujin in runtime, scalability was not possible
+without either reducing the number of cores or the introduction of
+hyperthreads.  No such additional compromise was required to achieve scalable
+results on Fujin.  Unless we can identify and resolve the underlying resource
+bottleneck on Raijin, it may not be possible to run such models efficiently on
+future MIC platforms.
+
+
+Software
+--------
 
 Ocean vs Ice scalability
 
@@ -248,7 +279,6 @@ Concurrent sea ice configuration
 Future scalability: weak scaling tests
 
 MIC challenges
-
 
 
 Conclusion
@@ -305,6 +335,8 @@ Figures
 =======
 
 ..
+   image:: figures/snake.pdf
+   image:: figures/ladder.pdf
    image:: figures/platform.pdf
    image:: figures/scaling.pdf
    image:: figures/submodels.pdf
