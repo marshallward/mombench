@@ -386,12 +386,12 @@ References
   by poleward shifting winds (Spence et al.)
 
 
-.. figure:: figures/snake.pdf
+.. figure:: figures/snake.eps
 
-.. figure:: figures/ladder.pdf
+.. figure:: figures/ladder.eps
 
-.. figure:: figures/platform.pdf
+.. figure:: figures/platform.eps
 
-.. figure:: figures/scaling.pdf
+.. figure:: figures/scaling.eps
 
-.. figure:: figures/submodels.pdf
+.. figure:: figures/submodels.eps

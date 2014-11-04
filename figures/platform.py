@@ -68,5 +68,6 @@ for ax in (ax1, ax2):
 ax1.legend((r2_x86[0], r2_fx10[0]), ('Raijin', 'Fujin'), loc='best')
 
 plt.tight_layout()
-plt.savefig('platform.pdf')
-plt.savefig('platform.svg')
+
+for ext in ('pdf', 'eps', 'svg'):
+    plt.savefig('platform.{}'.format(ext))

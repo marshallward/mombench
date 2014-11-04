@@ -79,5 +79,6 @@ for ax in (ax_wt, ax_eff):
     ax.legend(ax_lines[ax], titles, loc='best')
 
 plt.tight_layout()
-plt.savefig('scaling.pdf')
+for ext in ('pdf', 'eps', 'svg'):
+    plt.savefig('scaling.{}'.format(ext))
 plt.savefig('scaling.svg')

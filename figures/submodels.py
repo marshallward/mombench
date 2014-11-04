@@ -77,5 +77,5 @@ for (model, ax) in zip(submodels, axes):
 axes[0].legend(ax_lines, titles, loc='best')
 
 plt.tight_layout()
-plt.savefig('submodels.pdf')
-plt.savefig('submodels.svg')
+for ext in ('pdf', 'eps', 'svg'):
+    plt.savefig('submodels.{}'.format(ext))
