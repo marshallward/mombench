@@ -35,27 +35,31 @@ Scalability of global high-resolution ocean simulations using MOM
 Introduction
 ============
 
-Current global climate simulations, such as the CMIP studies,
-rely on coarse ocean models of approximately 1° resolution, but there is
-growing demand for a greater resolution of the ocean eddy fields, with
-corresponding resolutions on the order of 0.25° or 0.1°. Along with the
-scientific challenges, such simulations will place an increased demand on
-available computing resources, with computational needs and resulting data
-output expected to grow by several hundreds of times in size over the next
-decade.
+Current global climate simulations, such as the CMIP studies, rely on coarse
+ocean models of approximately 1° resolution, but there is growing demand for a
+greater resolution of the ocean eddy fields, with corresponding resolutions on
+the order of 0.25° or 0.1°.  Although the turbulent scales of atmospheric
+models are well-resolved at 1° scales, the very strong stratification of the
+ocean causes its most turbulent currents to emerge at much smaller resolutions,
+and have been absent in most climate modelling efforts [#].  Such turbulent
+processes are expected to have a major role the maintenance of the ocean's
+strongest currents such as the ACC, and in the vertical mixing and
+stratification of the ocean [#].
 
-Although atmosphere and ocean models have steadily increased in resolution over
-the decades, the much stronger stratification of the ocean causes its most
-turbulent scales to emerge at much smaller scales, and have been absent in most
-climate modelling efforts [#].  Such turbulent processes are expected to have a
-major role the maintenance of the ocean's strongest currents such as the ACC,
-and in the vertical mixing and stratification of the ocean [#].
+Along with the many scientific challenges of high-resolution climate modelling,
+a additional impediment in the adoption of greater resolutions in the ocean is
+the significant computational cost.  A typical climate simulation requires
+decades, if not hundreds, of simulation time to achieve a scientifically
+valuable result, and can require hundreds of such runs to perfect the tuning of
+their numerous parameters.  In such an environment, one needs the capacity to
+simulate many years per day.  To achieve such results will require proven
+scalability into hundreds, and eventually thousands, of CPUs.
 
-Despite the many scientific challenges of high-resolution climate modelling, a
-major impediment in the adoption of greater resolutions in the ocean is the
-significant computational cost.
-
-This paper is a
+In this paper, we assess the ability to run high-resolution simulations on
+computing platforms of Australia's National Computational Infrastructure (NCI).
+We focus on scalability up to 2000 CPUs on the Raijin and Fujin computing
+platforms.  We consider a selection of configurations on each platform and
+assess their efficiencies for use in future scientific research.
 
 
 Methods
@@ -98,12 +102,11 @@ rate of scientific value while also not overshadowing the model calculations.
 Raijin
 ------
 
-Raijin is the principal supercomputer of the National Computational
-Infrastructure (NCI) National Facility in Australia.  It is a Fujitsu PRIMERGY
-cluster comprised of 3592 computing nodes, with each containing two 2.6 GHz
-8-core Intel Xeon Sandy Bridge (E5-2670) CPUs [#], with a total core
-count of 57472.  Operational nodes have approximately 32 GiB of memory, with
-more memory available on selected nodes.
+Raijin is the principal supercomputer of the NCI National Facility.  It is a
+Fujitsu PRIMERGY cluster comprised of 3592 computing nodes, with each
+containing two 2.6 GHz 8-core Intel Xeon Sandy Bridge (E5-2670) CPUs [#], with
+a total core count of 57472.  Operational nodes have approximately 32 GiB of
+memory, with more memory available on selected nodes.
 
 The cluster network uses InfiniBand FDR-14 interconnects, which provide peak
 (4x aggregate) transfer speeds up to 54 Gb/s between nodes.  The network uses a
@@ -207,13 +210,13 @@ with the following formula:
 
    N_c = (1 - p) f \tau
 
-where :math:`p` is the mean fraction of MPI instructions across all ranks,
-:math:`f` is the CPU clock speed, and :math:`\tau` is the runtime.  This is an
+where `p` is the mean fraction of MPI instructions across all ranks,
+`f` is the CPU clock speed, and `\tau` is the runtime.  This is an
 imperfect estimate, since there may be additional communication costs outside
 of the MPI library, but it provides a reasonable approximation of
 vector calculation efficiency of each platform.
 
-A direct comparison of :math:`N_c` across platforms reveals a notable
+A direct comparison of `N_c` across platforms reveals a notable
 difference in the computational efficiency between the platforms, with Fujin
 experiments requiring approximately 50% more non-communication cycles than
 Raijin.
@@ -242,8 +245,8 @@ computed as
 
    \varepsilon = \frac{n_r \tau_r} {n \tau_n}
 
-where :math:`n` is the number of CPUs, :math:`\tau_n` is the runtime using
-:math:`n` CPUs, and :math:`r` is the reference experiment, which is 240 CPUs
+where `n` is the number of CPUs, `\tau_n` is the runtime using
+`n` CPUs, and `r` is the reference experiment, which is 240 CPUs
 for all configurations except the ladder Fujin runs, which use 255 CPUs.
 
 Figure 3b shows that, with the exception of the default Raijin setup, all runs
@@ -383,12 +386,12 @@ References
   by poleward shifting winds (Spence et al.)
 
 
-.. figure:: figures/snake.svg
+.. figure:: figures/snake.pdf
 
-.. figure:: figures/ladder.svg
+.. figure:: figures/ladder.pdf
 
-.. figure:: figures/platform.svg
+.. figure:: figures/platform.pdf
 
-.. figure:: figures/scaling.svg
+.. figure:: figures/scaling.pdf
 
-.. figure:: figures/submodels.svg
+.. figure:: figures/submodels.pdf
