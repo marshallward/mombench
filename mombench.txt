@@ -108,13 +108,13 @@ containing two 2.6 GHz 8-core Intel Xeon Sandy Bridge (E5-2670) CPUs [#], with
 a total core count of 57472.  Operational nodes have approximately 32 GiB of
 memory, with more memory available on selected nodes.
 
-The cluster network uses InfiniBand FDR-14 interconnects, which provide peak
-(4x aggregate) transfer speeds up to 54 Gb/s between nodes.  The network uses a
-two-level fat tree configuration, with 72 nodes (one rack) on each switch, and
-each rack connected to a top-level director switch.  Although it is possible to
-run jobs up to 1152 CPUs on a single rack, the high usage rate of Raijin tends
-to prevent such layouts.  We assume that all experiments in this study depend
-on the director switch.
+The cluster network uses InfiniBand (IB) FDR-14 interconnects, which provide
+peak (4x aggregate) transfer speeds up to 56 Gb/s between nodes.  There are 18
+nodes connected to each top-of-rack (ToR) IB switch.  The 72 nodes in each rack
+use 4 ToR switches. Each ToR switch connects to a top-level director switch,
+with 3 connections per ToR to each director.  Because of the high usage rate of
+Raijin, it is prohibitive to arrange jobs within the network, and we assume
+that all experiments in this study depend on the director switches.
 
 The operating system platform is CentOS 6.5, which uses the Linux 2.6.32
 kernel.  Jobs are managed using the PBSPro scheduler, and files are kept under
@@ -135,27 +135,26 @@ Fujin
 -----
 
 Fujin is NCI's Fujitsu FX10 cluster consisting of 96 compute nodes, each
-containing a 1.8 GHz 16-core SPARC64 IXfx CPU [#].  For our investigation,
+containing a 1.848 GHz 16-core SPARC64 IXfx CPU [#].  For our investigation,
 numerical experiments were limited to a maximum of 84 nodes, or 1344 cores.
 
 The interconnect is a streamlined version of the K-Computer's Tofu interconnect
 system, and consists of 8 serially connected *Tofu units*. Each unit contains
-12 compute nodes arranged as a 3D torus of shape 2 × 3 × 2.  Nodes are connected by
-10 bidirectional links with 5 Gb/s transfer rates, yielding a peak transfer
-rate of 100 Gb/s between nodes.  Tofu interconnects also include the *Tofu
-barrier* hardware module for optimised MPI reductions and broadcasts, but we do
-not use it in
-this study.
+12 compute nodes arranged as a 3D torus of shape 2 × 3 × 2.  Nodes are
+connected by 10 bidirectional links with 5 Gb/s transfer rates, yielding a peak
+transfer rate of 100 Gb/s between nodes.  Tofu interconnects also include the
+*Tofu barrier* hardware module for optimised MPI reductions and broadcasts, but
+we do not use it in this study.
 
 When compared to Raijin, the lower clock speed of Fujin's CPUs will necessarily
 result in lower optimal performance for computationally-bound software.
 However, the fixed Tofu interconnect offers the potential for optimized node
 layout and efficient scalability for higher CPU counts.
 
-The operating system platform is based on the Red Hat Enterprise Linux (RHEL)
-Server release 6.1, also based on the Linux 2.6.32 kernel.  Jobs are managed by
-the scheduler of the Parallelnavi suite.  The filesystem is the Fujitsu Exabyte
-File System (FEFS) 1.3.1, which is based on the Lustre 1.8.5 filesystem.
+The operating system platform is Fujitsu XTC OS 1.3.6, with a Linux 2.6.25
+kernel.  Jobs are managed by the scheduler of the Parallelnavi suite.  The
+filesystem is the Fujitsu Exabyte File System (FEFS) 1.3.1, which is based on
+the Lustre 1.8.5 filesystem.
 
 The model is compiled using the Fujitsu compiler suite 1.2.1, which includes
 Fujitsu's MPI library, which is based on Open MPI 1.4.3.  Data IO uses NetCDF
