@@ -35,7 +35,7 @@ Scalability of global 0.25° ocean simulations using MOM
 Introduction
 ============
 
-Current global climate simulations tend to rely on coarse ocean models of
+Current global climate simulations typically rely on coarse ocean models of
 approximately 1° resolution, but there is growing demand for a greater
 resolution of the ocean eddy fields, with corresponding resolutions on the
 order of 0.25° or 0.1°.  Although the turbulent scales of atmospheric models
@@ -43,8 +43,8 @@ are well-resolved at 1° scales, the very strong stratification of the ocean
 causes its most turbulent currents to emerge at much smaller resolutions, and
 have been absent in most climate modelling efforts [#].  Such turbulent
 processes are expected to have a major role in the maintenance of the ocean's
-strongest currents such as the ACC, and in the vertical mixing and
-stratification of the ocean [#].
+strongest currents, and in the vertical mixing and stratification of the ocean
+[#].
 
 Along with the many scientific challenges of high-resolution climate modelling,
 a additional impediment in the adoption of greater resolutions in the ocean is
@@ -53,11 +53,11 @@ decades, if not hundreds, of simulation time to achieve a scientifically
 valuable result, and can require hundreds of such runs to perfect the tuning of
 their numerous parameters.  In such an environment, one needs the capacity to
 simulate many years per day.  To achieve such results will require proven
-scalability into hundreds, and eventually thousands, of CPUs.
+scalability into hundreds, if not thousands, of CPUs.
 
 In this paper, we assess the ability to run high-resolution simulations on
 computing platforms of Australia's National Computational Infrastructure (NCI).
-We focus on scalability up to 2000 CPUs on the Raijin and Fujin computing
+We focus on scalability up to 1920 CPUs on the Raijin and Fujin computing
 platforms.  We consider a selection of configurations on each platform and
 assess their efficiencies for use in future scientific research.
 
@@ -158,7 +158,7 @@ Jobs are managed by the scheduler of the Parallelnavi suite.  The filesystem is
 the Fujitsu Exabyte File System (FEFS) 1.3.1, which is based on the Lustre
 1.8.5 filesystem.
 
-The model is compiled using the Fujitsu compiler suite 1.2.1, which includes
+The model is compiled using the Fujitsu compiler suite 1.2.1 and includes
 Fujitsu's MPI library, which is based on Open MPI 1.4.3.  Data IO uses NetCDF
 4.3.2, built with HDF5 1.8.12 and NetCDF-Fortran 4.2.  The model is compiled
 using the ``-Kfast``, ``-Kocl``, and ``-O2`` optimization flags.
@@ -191,10 +191,10 @@ Platform Configuration
 
 Figure 2a shows the total runtime for a 480-CPU experiment across different
 hardware platforms and configurations.  The configuration choice on Raijin had
-a major impact on performance, with observed speedups of 1.28 and 1.60 for
-hyperthreaded and 12 PPN experiments, respectively.  Process
-layout on Fujin had an observable but less notable impact, with the snake
-layout achieving a 1.15 speedup in comparison to the ladder layout.
+a major impact on performance, with observed speedups of 28% and 60% for
+hyperthreaded and 12 PPN experiments, respectively.  Process layout on Fujin
+had an observable but less notable impact, with the snake layout achieving a
+15% speedup in comparison to the ladder layout.
 
 Experiment runtimes on Raijin are faster than on Fujin, with the fastest runs
 on Raijin outperforming the Fujin jobs by more than a factor of two.  Much of
@@ -212,17 +212,19 @@ by estimating the mean number of cycles per CPU with the following formula:
 where `f` is the CPU clock speed, `p` is the mean fraction of MPI instructions
 across all ranks, and `\tau_o` is the ocean submodel runtime.  We focus on the
 ocean submodel because it is strongly dominated by floating point arithmetic,
-and will prove to have the best scalability across CPU size.
+and is shown in the next section to demonstrate high scalability up to 1920
+CPUs.
 
 `N_c` is an imperfect estimate of cycle count, since total communication time
 may not accurately represent communication time in the ocean model.  There may
 also be additional communication costs outside of the MPI library.  But it can
-potentially provide a reasonable approximation of the number of computational
-cycles and the relative efficiency of vector arithmetic on each platform.
+provide an approximation of the number of computational cycles, as well as the
+relative efficiency of vector arithmetic on each platform.
 
-After correcting for clock speed, and focussing on numerical calculations, we
-see that the performance of the two platforms is comparable, with SPARC
-operations requiring only 15% more cycles than the x86 operations.
+After correcting for clock speed and focussing on the ocean model, our estimate
+indicates that the performance of the two platforms is comparable, with SPARC
+operations requiring only 15% more cycles than the x86 operations for its
+simulation.
 
 
 Scaling
@@ -366,7 +368,7 @@ the runtimes increased by a factor of three and were unable to scale beyond 480
 CPUs.
 
 Comparison of the submodels within the ice-ocean configuration shows that the
-ocean model scales up to 2000 cores with only a negligible loss of efficiency,
+ocean model scales up to 1920 cores with only a negligible loss of efficiency,
 while the sea ice and coupling components cease to scale after 480 CPUs.
 Future efforts to improve the scalability of MOM should target these
 subcomponents.
@@ -401,12 +403,12 @@ References
   by poleward shifting winds (Spence et al.)
 
 
-.. figure:: figures/snake.eps
+.. figure:: figures/snake.pdf
 
-.. figure:: figures/ladder.eps
+.. figure:: figures/ladder.pdf
 
-.. figure:: figures/platform.eps
+.. figure:: figures/platform.pdf
 
-.. figure:: figures/scaling.eps
+.. figure:: figures/scaling.pdf
 
-.. figure:: figures/submodels.eps
+.. figure:: figures/submodels.pdf
