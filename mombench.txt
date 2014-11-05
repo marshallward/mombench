@@ -1,6 +1,6 @@
-=================================================================
-Scalability of global high-resolution ocean simulations using MOM
-=================================================================
+=======================================================
+Scalability of global 0.25° ocean simulations using MOM
+=======================================================
 
 :Authors:
    - Marshall Ward
@@ -35,13 +35,13 @@ Scalability of global high-resolution ocean simulations using MOM
 Introduction
 ============
 
-Current global climate simulations, such as the CMIP studies, rely on coarse
-ocean models of approximately 1° resolution, but there is growing demand for a
-greater resolution of the ocean eddy fields, with corresponding resolutions on
-the order of 0.25° or 0.1°.  Although the turbulent scales of atmospheric
-models are well-resolved at 1° scales, the very strong stratification of the
-ocean causes its most turbulent currents to emerge at much smaller resolutions,
-and have been absent in most climate modelling efforts [#].  Such turbulent
+Current global climate simulations tend to rely on coarse ocean models of
+approximately 1° resolution, but there is growing demand for a greater
+resolution of the ocean eddy fields, with corresponding resolutions on the
+order of 0.25° or 0.1°.  Although the turbulent scales of atmospheric models
+are well-resolved at 1° scales, the very strong stratification of the ocean
+causes its most turbulent currents to emerge at much smaller resolutions, and
+have been absent in most climate modelling efforts [#].  Such turbulent
 processes are expected to have a major role in the maintenance of the ocean's
 strongest currents such as the ACC, and in the vertical mixing and
 stratification of the ocean [#].
@@ -77,8 +77,8 @@ coupler [#].  The simulations presented here use the MOM 5.1 source code
 release, which includes the SIS and FMS components.
 
 The numerical grid of the ocean and sea ice models is a curvilinear grid with a
-nominal resolution of 0.25° and contains 1440 × 1080 horizontal grid points.  The
-ocean and sea ice models use 50 and 6 vertical levels, respectively.
+nominal resolution of 0.25° and contains 1440 × 1080 horizontal grid points.
+The ocean and sea ice models use 50 and 6 vertical levels, respectively.
 
 Parallelisation is achieved by decomposing the horizontal grid into tiles of
 equal size, with additional halo grid points surrounding each tile.  For each
@@ -105,8 +105,9 @@ Raijin
 Raijin is the principal supercomputer of the NCI National Facility.  It is a
 Fujitsu PRIMERGY cluster comprised of 3592 computing nodes, with each
 containing two 2.6 GHz 8-core Intel Xeon Sandy Bridge (E5-2670) CPUs [#], with
-a total core count of 57472.  Operational nodes have approximately 32 GiB of
-memory, with more memory available on selected nodes.
+a total core count of 57472.  Turbo boost is enabled for these runs, increasing
+the maximum clock speed on 16 cores to 3.0 GHz.  Operational nodes have
+approximately 32 GiB of memory, with more memory available on selected nodes.
 
 The cluster network uses InfiniBand (IB) FDR-14 interconnects, which provide
 peak (4x aggregate) transfer speeds up to 56 Gb/s between nodes.  There are 18
@@ -122,13 +123,14 @@ a Lustre 2.5 filesystem.
 
 We use the Intel Compiler Suite 14.3.172 for model compilation.  MPI
 communication uses Open MPI 1.8.2 and data IO uses NetCDF 4.3.0, which was
-built using HDF5 1.8.10.  The model is built with the ``-O2`` and ``--xhost``
+built using HDF5 1.8.10.  The model is built with the ``-O2`` and ``-xhost``
 optimisation flags.
 
 We consider three experiment configurations on Raijin: a standard configuration
 using 16 model processes per node (herein "default"), a similar configuration
 using hyperthreaded cores, and a third configuration running 12 model processes
-per node (herein "12 PPN").
+per node (herein "12 PPN").  For the 12 PPN configuration, turbo-boosted clock
+speeds are increased to 3.1 GHz.
 
 
 Fujin
@@ -151,10 +153,10 @@ result in lower optimal performance for computationally-bound software.
 However, the fixed Tofu interconnect offers the potential for optimized node
 layout and efficient scalability for higher CPU counts.
 
-The operating system platform is Fujitsu XTC OS 1.3.6, with a Linux 2.6.25
-kernel.  Jobs are managed by the scheduler of the Parallelnavi suite.  The
-filesystem is the Fujitsu Exabyte File System (FEFS) 1.3.1, which is based on
-the Lustre 1.8.5 filesystem.
+The FX10 operating system is Fujitsu XTC OS 1.3.6, with a Linux 2.6.25 kernel.
+Jobs are managed by the scheduler of the Parallelnavi suite.  The filesystem is
+the Fujitsu Exabyte File System (FEFS) 1.3.1, which is based on the Lustre
+1.8.5 filesystem.
 
 The model is compiled using the Fujitsu compiler suite 1.2.1, which includes
 Fujitsu's MPI library, which is based on Open MPI 1.4.3.  Data IO uses NetCDF
@@ -170,12 +172,11 @@ nodes, allowing for smaller tile widths, but it also requires diagonally
 adjacent tiles to send data through non-neighbour nodes.
 
 
-Profiling
----------
+Timing
+------
 
 We use the IPM 2.0.2 profiler to construct basic runtime statistics.  Model
-runtime, memory usage per CPU rank, and MPI runtimes are based on IPM output
-logs.
+runtime and MPI usage times are based on IPM output logs.
 
 Submodel runtimes are provided by the internal timers of the MOM ocean model,
 which are based on the ``system_clock`` subroutine of the Intel Fortran
@@ -199,26 +200,29 @@ Experiment runtimes on Raijin are faster than on Fujin, with the fastest runs
 on Raijin outperforming the Fujin jobs by more than a factor of two.  Much of
 this difference in performance can be attributed to the clock speeds of the two
 platforms.  However, the clock speed ratio of the Raijin and Fujin CPUs is only
-1.41, and cannot alone account for the differences in performance.
+1.62, and cannot alone account for the differences in performance.
 
 Figure 2b attempts to clarify this performance difference across the platforms
-by estimating the mean number of concurrent computational instructions per CPU
-with the following formula:
+by estimating the mean number of cycles per CPU with the following formula:
 
 .. math::
 
-   N_c = (1 - p) f \tau
+   N_c = f (1 - p) \tau_o
 
-where `p` is the mean fraction of MPI instructions across all ranks,
-`f` is the CPU clock speed, and `\tau` is the runtime.  This is an
-imperfect estimate, since there may be additional communication costs outside
-of the MPI library, but it provides a reasonable approximation of
-vector calculation efficiency of each platform.
+where `f` is the CPU clock speed, `p` is the mean fraction of MPI instructions
+across all ranks, and `\tau_o` is the ocean submodel runtime.  We focus on the
+ocean submodel because it is strongly dominated by floating point arithmetic,
+and will prove to have the best scalability across CPU size.
 
-A direct comparison of `N_c` across platforms reveals a notable
-difference in the computational efficiency between the platforms, with Fujin
-experiments requiring approximately 50% more non-communication cycles than
-Raijin.
+`N_c` is an imperfect estimate of cycle count, since total communication time
+may not accurately represent communication time in the ocean model.  There may
+also be additional communication costs outside of the MPI library.  But it can
+potentially provide a reasonable approximation of the number of computational
+cycles and the relative efficiency of vector arithmetic on each platform.
+
+After correcting for clock speed, and focussing on numerical calculations, we
+see that the performance of the two platforms is comparable, with SPARC
+operations requiring only 15% more cycles than the x86 operations.
 
 
 Scaling
@@ -275,33 +279,44 @@ model, although it is notably lower in the other model components.
 Discussion
 ==========
 
+Configuration
+-------------
+
+Scalability on Raijin was only achieved after either reducing the number of
+processes per node, or enabling hyperthreading on the core.  In both
+situations, we reduce the number of processes per computational core, and it
+creates a dramatic improvement on performance.  While the underlying cause is
+still not understood, one indication is use of subthreads within Open MPI.
+Since each model instance create four MPI subthreads, there is a competition
+for resources between these processes on each core. By allowing the kernel to
+run these threads concurrently with computational threads, we may be relieving
+any bottlenecks related to shared memory management or context switching
+criteria. However, further investigations are required to confirm this
+explanation, and to determine if it is a consequence of x86 architecture,
+kernel scheduling, or Open MPI implementation.
+
+Scalability on Fujin was not affected by processor layout, although the
+performance of the snake layout was measurably faster than the ladder layout.
+From this, we conclude that the non-neighbor communication of ladder layouts
+can have a detrimental effect on performance, and that walltimes can increase
+
+
 Platform Comparison
 -------------------
 
 Aside from the general scaling results, the most notable observation in this
 study is the significant discrepancy in performance between the Raijin and
-Fujin platforms.  Given the many substantial differences in the two platforms,
-it is difficult to attribute it to any single cause.  However, we review some
-of the major points of difference here as potential targets of future
-investigation.
+Fujin platforms.  An estimation of cycle count suggests that most of this
+difference can be attributed to CPU clock speed, although the x86 CPUs still
+demonstrate somewhat better performance per cycle.  This can be attributed to
+various factors, such as differences in CPU cache architecture or compilers,
+but a more thorough investigation would be required to confirm this detail.
 
-CPU architecture is the most fundamental difference between the two platforms.
-The CPUs operate at different clock speeds, but each is capable of performing 8
-floating point operations per cycle.  However, the Xeon CPUs on Raijin also
-include an additional L2 cache on each core inbetween the local L1 cache and
-shared L3 cache.  The absence of this intermediate cache on Fujin's SPARC IXfx
-CPUs could cause a greater sensitivity to cache misses and interrupt the
-performance of the computational pipeline.
-
-Another crucial difference is the specific compilers used on each platform.
-Both compilers include a range of tuning parameters which were not investigated
-in this study.  A more accurate comparison of platforms would also require a
-greater uniformity of compiler settings.
-
-An additional opportunity for improved hardware performance on the FX10 is the
-Tofu barrier acceleration of any MPI reduction or broadcast calls.  Such
-operations are a dominant part of most diagnostic calculations, and could
-become crucial in future simulations with high levels of diagnostic output.
+An unexplored opportunity for improved hardware performance on Fujin is the
+Tofu barrier acceleration of the MPI reductions and broadcasts.  Such
+operations are a dominant part of most diagnostic calculations, and the Tofu
+barrier could have an major impact on future simulations with high levels of
+diagnostic output.
 
 Another point of consideration is the increasing trend of greater numbers of
 cores on each node, including MIC architectures such as Xeon Phi accelerators.

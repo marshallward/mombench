@@ -25,13 +25,14 @@ for plat, fname in zip(platforms, pdata_files):
         prof_data[plat] = yaml.load(pfile)
 
 wtimes = np.array([prof_data[p][480]['runtime']['total'] for p in platforms])
+otimes = np.array([prof_data[p][480]['runtime']['ocean'] for p in platforms])
 pcomm = np.array([prof_data[p][480]['mpi']['mean'] for p in platforms])
 
 #cycles = np.empty(wtimes.shape)
 #cycles[:3] = f_raijin * wtimes[:3]
 #cycles[3:] = f_fujin * wtimes[3:]
 
-cycles = cfreqs * wtimes
+cycles = cfreqs * otimes
 
 calcs = (1. - pcomm) * cycles
 
@@ -49,13 +50,13 @@ r2_fx10 = ax2.bar(range(3, 5), calcs[3:], color='r', align='center')
 rect_set[ax2] = (r2_x86, r2_fx10)
 
 ax1.set_title('Walltime on 480 CPUs across hardware configurations')
-ax2.set_title('Weighted ocean submodel instruction count')
+ax2.set_title('Estimated ocean submodel cycle count')
 
 ax1.set_ylabel('Walltime (s)')
 ax2.set_ylabel('Instruction count')
 
 ax1.set_yticks(np.linspace(0., 2000., 5))
-#ax2.set_ylim(0., 3.2e12)
+ax2.set_ylim(0., 3.2e12)
 
 # X axis is shared
 ax1.set_xticks(range(5))
@@ -69,7 +70,7 @@ for ax in (ax1, ax2):
         for rect in rset:
             val = rect.get_height()
             v_x = rect.get_x() + rect.get_width() / 2.
-            v_y = 1.01 * val
+            v_y = 1.02 * val
 
             ax.text(v_x, v_y, v_fmt[ax].format(val), ha='center', va='bottom')
 
