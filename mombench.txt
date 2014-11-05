@@ -269,13 +269,11 @@ model subcomponents, shown in Figures 4b and 4c, grow progressively worse in
 performance as the number of CPUs increase, indicating major bottlenecks in the
 sea ice model and submodel flux exchange components.
 
-There is some evidence of improved efficiency in the ocean model, particularly
-in the Fujin experiments, suggesting that the communication bottlenecks in the
-sea ice and coupler models may also be freeing additional resources for the
-ocean model.
-
-Scaling efficiency on Fujin appears to be better than Raijin for the ocean
-model, although it is notably lower in the other model components.
+There is some evidence of improved efficiency in the ocean model, indicating
+that the communication bottlenecks in the sea ice and coupler models may also
+be freeing additional resources for the ocean model.  Scaling efficiency on
+Fujin appears to be better than Raijin for the ocean model, although it is
+notably lower in the other model components.
 
 
 Discussion
