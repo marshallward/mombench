@@ -282,35 +282,35 @@ Discussion
 Configuration
 -------------
 
-Scalability on Raijin was only achieved after either reducing the number of
-processes per node, or enabling hyperthreading on the core.  In both
-situations, we reduce the number of processes per computational core, and it
-creates a dramatic improvement on performance.  While the underlying cause is
-still not understood, one indication is use of subthreads within Open MPI.
-Since each model instance create four MPI subthreads, there is a competition
-for resources between these processes on each core. By allowing the kernel to
-run these threads concurrently with computational threads, we may be relieving
-any bottlenecks related to shared memory management or context switching
-criteria. However, further investigations are required to confirm this
-explanation, and to determine if it is a consequence of x86 architecture,
-kernel scheduling, or Open MPI implementation.
+Scalability on Raijin beyond 480 CPUs was only possible after either reducing
+the number of processes per node, or enabling hyperthreading on the core.  In
+both situations, we reduced the number of processes per computational core.
+While the underlying cause is not known, one point of consideration is use of
+subthreads within Open MPI.  Since each model instance create four MPI
+subthreads, there is a competition for resources between these processes on
+each core.  By allowing the kernel to shift some of these jobs to other
+computational cores, we may be relieving any bottlenecks related to shared
+memory management or context switching. But further investigations are required
+to confirm this explanation, and to determine if it is a consequence of x86
+architecture, kernel scheduling, or Open MPI implementation.
 
 Scalability on Fujin was not affected by processor layout, although the
 performance of the snake layout was measurably faster than the ladder layout.
-From this, we conclude that the non-neighbor communication of ladder layouts
-can have a detrimental effect on performance, and that walltimes can increase
+From this, we conclude that even a modest dependence on non-neighbor
+communication, such as in our ladder layouts, can have a detrimental effect on
+performance, and that snake layouts should be used when possible.
 
 
 Platform Comparison
 -------------------
 
-Aside from the general scaling results, the most notable observation in this
-study is the significant discrepancy in performance between the Raijin and
-Fujin platforms.  An estimation of cycle count suggests that most of this
-difference can be attributed to CPU clock speed, although the x86 CPUs still
-demonstrate somewhat better performance per cycle.  This can be attributed to
-various factors, such as differences in CPU cache architecture or compilers,
-but a more thorough investigation would be required to confirm this detail.
+An additional observation in this study is the significant discrepancy in
+performance between the Raijin and Fujin platforms.  Our estimate of cycle
+count indicates that most of this difference can be attributed to CPU clock
+speed.  However, the x86 CPUs still demonstrate somewhat better performance per
+cycle.  This can be attributed to various factors, such as differences in CPU
+cache architecture or compilers, but a more thorough investigation would be
+required to confirm the level of efficiency and underlying cause.
 
 An unexplored opportunity for improved hardware performance on Fujin is the
 Tofu barrier acceleration of the MPI reductions and broadcasts.  Such
@@ -321,28 +321,26 @@ diagnostic output.
 Another point of consideration is the increasing trend of greater numbers of
 cores on each node, including MIC architectures such as Xeon Phi accelerators.
 Although Raijin outperformed Fujin in runtime, scalability was not possible
-without either reducing the number of cores or the introduction of
-hyperthreads.  No such additional compromise was required to achieve scalable
-results on Fujin.  Future efforts to improve scalability must identify and
-resolve this underlying resource bottleneck.
+without the introduction of redundant computational cores.  No such additional
+resources were required to achieve scalable results on Fujin.
 
 
 Submodel Performance
 --------------------
 
-A second major conclusion of this study is the difference in ocean scalability
-versus the ice and coupler submodels. Running the ocean and sea ice serially on
-each process is a potential bottleneck that could be addressed by moving the
-sea ice calculations onto separate core.  Load balancing would become a greater
-concern, and a separation of ocean and ice would put a greater burden on the
-the coupler.  But given the inability of SIS to scale beyond 480 CPUs, and the
-very large number of sea ice timesteps required per ocean timestep, this may
-become a requirement in the future.
+The difference in ocean scalability versus the ice and coupler submodel also
+indicates a potential target for optimization.  Running the ocean and sea ice
+serially on each process is a potential bottleneck that could be addressed by
+moving the sea ice calculations onto separate core.  In such a configuration,
+load balancing would become a greater concern, and a separation of ocean and
+ice would put a greater burden on the coupler.  But given the inability of SIS
+to scale beyond 480 CPUs, and the very large number of sea ice timesteps
+required per ocean timestep, this may become a requirement in the future.
 
-The poor scalability of the coupling subroutines also shows that a distribution
-of ocean and sea ice will not alone be sufficient to achieve future
-scalability.  A targeted investigation of the coupler is also required, and
-field exchange between models must be a target of future optimisation efforts.
+The poor scalability of the coupling subroutines indicate that a
+parallelisation of of ocean and sea ice timesteps will not be sufficient to
+achieve future scalability. Efficient field exchange between models must also
+be a target of future optimisation efforts.
 
 
 Conclusion
@@ -372,11 +370,11 @@ Future efforts to improve the scalability of MOM should target these
 subcomponents.
 
 Both platforms have proven capable of running global high-resolution
-simulations of the ocean, and both provide greater opportunity to investigate
-the impacts of turbulent-scale processes on global climate.  Development
-towards resolutions of 0.1° and beyond will require further investigations of
-the underlying codes and their resource requirements, and ongoing
-collaborations between industry and the academic research community.
+simulations of the ocean, and enable scientists to investigate the impacts of
+turbulent-scale processes on global climate.  Development towards resolutions
+of 0.1° and beyond will require further investigations of the underlying codes
+and their resource requirements, and ongoing collaborations between industry
+and the academic research community.
 
 
 Acknowledgements
