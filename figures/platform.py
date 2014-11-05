@@ -2,6 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import yaml
 
+cfreqs = np.array([2.601e9 + 4 * 0.1e9,
+                   2.601e9 + 4 * 0.1e9,
+                   2.601e9 + 5 * 0.1e9,
+                   1.848e9,
+                   1.848e9])
+
 f_raijin = 2.601e9
 f_fujin = 1.848e9
 
@@ -21,9 +27,11 @@ for plat, fname in zip(platforms, pdata_files):
 wtimes = np.array([prof_data[p][480]['runtime']['total'] for p in platforms])
 pcomm = np.array([prof_data[p][480]['mpi']['mean'] for p in platforms])
 
-cycles = np.empty(wtimes.shape)
-cycles[:3] = f_raijin * wtimes[:3]
-cycles[3:] = f_fujin * wtimes[3:]
+#cycles = np.empty(wtimes.shape)
+#cycles[:3] = f_raijin * wtimes[:3]
+#cycles[3:] = f_fujin * wtimes[3:]
+
+cycles = cfreqs * wtimes
 
 calcs = (1. - pcomm) * cycles
 

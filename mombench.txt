@@ -22,11 +22,11 @@ Scalability of global high-resolution ocean simulations using MOM
    hosted at the National Computational Infrastructure (NCI) National Facility:
    an x86-based PRIMERGY cluster with InfiniBand interconnects, and a
    SPARC-based FX10 system using the Tofu interconnect.  We show that such
-   models produces efficient, scalable results on both platforms up to 960
-   CPUs.  Speeds are notably faster on Raijin when either hyperthreading or
-   fewer cores per node are used.  We also show that the ocean submodel scales
-   up to 1920 CPUs with negligible loss of efficiency, but the sea ice and
-   coupler components quickly become inefficient and represent substantial
+   models produce efficient, scalable results on both platforms up to 960 CPUs.
+   Speeds are notably faster on Raijin when either hyperthreading or fewer
+   cores per node are used.  We also show that the ocean submodel scales up to
+   1920 CPUs with negligible loss of efficiency, but the sea ice and coupler
+   components quickly become inefficient and represent substantial
    bottlenecks in future scalability.  Our results show that both platforms
    offer sufficient performance for future scientific research, and highlight
    to the challenges for future scalability and optimization.
@@ -42,7 +42,7 @@ the order of 0.25° or 0.1°.  Although the turbulent scales of atmospheric
 models are well-resolved at 1° scales, the very strong stratification of the
 ocean causes its most turbulent currents to emerge at much smaller resolutions,
 and have been absent in most climate modelling efforts [#].  Such turbulent
-processes are expected to have a major role the maintenance of the ocean's
+processes are expected to have a major role in the maintenance of the ocean's
 strongest currents such as the ACC, and in the vertical mixing and
 stratification of the ocean [#].
 
@@ -162,13 +162,13 @@ Fujitsu's MPI library, which is based on Open MPI 1.4.3.  Data IO uses NetCDF
 4.3.2, built with HDF5 1.8.12 and NetCDF-Fortran 4.2.  The model is compiled
 using the ``-Kfast``, ``-Kocl``, and ``-O2`` optimization flags.
 
-We consider two configurations on Fujin, denoted as *snake* and *ladder*
-layouts.  Node placement for a single Tofu unit for each is illustrated in
-Figure 1.  The snake layout guarantees that all communications is exclusively
-between neighbour nodes, but also requires that each node span an entire
-latitude line.  The ladder layout divides each latitude line across two nodes,
-allowing for smaller tile widths, but it also requires diagonally adjacent
-tiles to send data through non-neighbour nodes.
+We consider two configurations on Fujin, denoted here as *snake* and *ladder*
+layouts.  Node placement for a single Tofu unit for each layout is illustrated
+in Figure 1.  The snake layout guarantees that all communications is
+exclusively between neighbour nodes, but also requires that each node span an
+entire latitude line.  The ladder layout divides each latitude line across two
+nodes, allowing for smaller tile widths, but it also requires diagonally
+adjacent tiles to send data through non-neighbour nodes.
 
 
 Profiling
@@ -289,7 +289,7 @@ investigation.
 CPU architecture is the most fundamental difference between the two platforms.
 The CPUs operate at different clock speeds, but each is capable of performing 8
 floating point operations per cycle.  However, the Xeon CPUs on Raijin also
-include an additional L2 cache on each core inbetween the local L1 case and
+include an additional L2 cache on each core inbetween the local L1 cache and
 shared L3 cache.  The absence of this intermediate cache on Fujin's SPARC IXfx
 CPUs could cause a greater sensitivity to cache misses and interrupt the
 performance of the computational pipeline.
@@ -351,7 +351,7 @@ efficiency.  When all 16 cores on each node were used without hyperthreading,
 the runtimes increased by a factor of three and were unable to scale beyond 480
 CPUs.
 
-Comparison of the submodels within the ice-ocean configuration show that the
+Comparison of the submodels within the ice-ocean configuration shows that the
 ocean model scales up to 2000 cores with only a negligible loss of efficiency,
 while the sea ice and coupling components cease to scale after 480 CPUs.
 Future efforts to improve the scalability of MOM should target these
@@ -370,12 +370,13 @@ Acknowledgements
 
 This research was undertaken with the assistance of resources from the National
 Computational Infrastructure (NCI), which is supported by the Australian
-Government.
+Government.  We are grateful to Symon Swann of Fujitsu Australia and Motohiro
+Yamada of Fujitsu Japan for constructive comments on the platform
+architectures.
 
 TODO?
 
 * Access-Opt project?
-* Fujitsu engineers?
 * ARCCSS?
 
 
