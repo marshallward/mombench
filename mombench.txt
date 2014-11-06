@@ -174,8 +174,9 @@ adjacent tiles to send data through non-neighbour nodes.
 Timing
 ------
 
-We use the IPM 2.0.2 profiler to construct basic runtime statistics.  Model
-runtime and MPI usage times are based on IPM output logs.
+On Raijin, we use the IPM 2.0.2 profiler to construct basic runtime statistics.
+Model runtime and MPI usage times are based on IPM output logs.  On Fujin,
+runtime and MPI usage times are from the ``fipp`` profiler output logs.
 
 Submodel runtimes are provided by the internal timers of the MOM ocean model,
 which are based on the ``system_clock`` subroutine of the Intel Fortran
