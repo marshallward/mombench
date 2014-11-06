@@ -84,7 +84,7 @@ equal size, with additional halo grid points surrounding each tile.  For each
 timestep, the halos of adjacent and diagonally adjacent tiles are updated,
 requiring 8 messages per field.
 
-Standard experiments are run for 31 days, using 1488 timesteps of 1800 s
+Standard experiments are run for 31 days, using 1488 timesteps of 1800 second
 resolution.  Each ocean timestep requires 72 additional sea ice timesteps.  A
 longer simulation time was chosen to represent a typical integration time for
 scientific analysis, and to reduce any statistical variability of the observed
@@ -103,7 +103,7 @@ Raijin
 
 Raijin is the principal supercomputer of the NCI National Facility.  It is a
 Fujitsu PRIMERGY cluster comprised of 3592 computing nodes, with each
-containing two 2.6 GHz 8-core Intel Xeon Sandy Bridge (E5-2670) CPUs [#], with
+containing two 2.6 GHz 8-core Intel Xeon Sandy Bridge (E5-2670) CPUs, with
 a total core count of 57472.  Turbo boost is enabled for these runs, increasing
 the maximum clock speed on 16 cores to 3.0 GHz.  Operational nodes have
 approximately 32 GiB of memory, with more memory available on selected nodes.
