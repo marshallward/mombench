@@ -10,10 +10,10 @@ Scalability of global 0.25° ocean simulations using MOM
 
 :Organization:
    National Computational Infrastructure, Australian National University,
-   Canberra ACT 2601, Australia
+   Canberra, Australia
 
 :Organization:
-   Fujitsu Australia Limited, Canberra, Australia (TODO?)
+   Fujitsu Australia Limited, Canberra, Australia
 
 :Abstract:
 
@@ -38,21 +38,20 @@ Introduction
 Current global climate simulations typically rely on coarse ocean models of
 approximately 1° resolution, but there is growing demand for a greater
 resolution of the ocean eddy fields, with corresponding resolutions on the
-order of 0.25° or 0.1°.  Although the turbulent scales of atmospheric models
-are well-resolved at 1° scales, the very strong stratification of the ocean
-causes its most turbulent currents to emerge at much smaller resolutions, and
-have been absent in most climate modelling efforts [#].  Such turbulent
+order of 0.25° or 0.1°. [#]_  The very strong stratification of the ocean
+causes its most turbulent currents to emerge at these smaller resolutions, [#]_
+which are absent from coarse-resolution climate models.  Such turbulent
 processes are expected to have a major role in the maintenance of the ocean's
-strongest currents, and in the vertical mixing and stratification of the ocean
-[#].
+strongest currents, and in the vertical mixing and stratification of the
+ocean. [#]_
 
 Along with the many scientific challenges of high-resolution climate modelling,
 a additional impediment in the adoption of greater resolutions in the ocean is
 the significant computational cost.  A typical climate simulation requires
-decades, if not hundreds, of simulation time to achieve a scientifically
+decades, if not centuries, of simulation time to achieve a scientifically
 valuable result, and can require hundreds of such runs to perfect the tuning of
-their numerous parameters.  In such an environment, one needs the capacity to
-simulate many years per day.  To achieve such results will require proven
+their numerous parameters. [1]_  In such an environment, one needs the capacity
+to simulate many years per day.  To achieve such results will require proven
 scalability into hundreds, if not thousands, of CPUs.
 
 In this paper, we assess the ability to run high-resolution simulations on
@@ -69,12 +68,12 @@ Numerical Model
 ---------------
 
 The experiment used in this study is the global ocean-sea ice model of Spence
-et al. (2014) [#], which was based on the Geophysical Fluid Dynamics Laboratory
-(GFDL) CM2.5 model (Delworth et al., 2012) [#].  The numerical submodels are
-the Modular Ocean Model (MOM) and the Sea Ice Simulator (SIS), built from the
-Flexible Modeling System (FMS) framework, which also includes the ocean-ice
-coupler [#].  The simulations presented here use the MOM 5.1 source code
-release, which includes the SIS and FMS components.
+et al. (2014), [#]_ which was based on the Geophysical Fluid Dynamics
+Laboratory (GFDL) CM2.5 model. [#]_  The numerical submodels are the Modular
+Ocean Model (MOM) and the Sea Ice Simulator (SIS), built from the Flexible
+Modeling System (FMS) framework, which also includes the ocean-ice coupler.
+[#]_ The simulations presented here use the MOM 5.1 source code release, which
+includes the SIS and FMS components.
 
 The numerical grid of the ocean and sea ice models is a curvilinear grid with a
 nominal resolution of 0.25° and contains 1440 × 1080 horizontal grid points.
@@ -380,31 +379,54 @@ and the academic research community.
 Acknowledgements
 ================
 
-This research was undertaken with the assistance of resources from the National
-Computational Infrastructure (NCI), which is supported by the Australian
-Government.  We are grateful to Symon Swann of Fujitsu Australia and Motohiro
-Yamada of Fujitsu Japan for constructive comments on the platform
-architectures.
+This work was conducted as part of the ACCESS Optimisation Project, a
+collaboration between NCI, Fujitsu, and the Australian Bureau of Meteorology.
+Research was undertaken with the assistance of resources from NCI, which is
+supported by the Australian Government.  We are grateful to Mark Cheeseman of
+NCI, Symon Swann of Fujitsu Australia, and Motohiro Yamada of Fujitsu Japan for
+constructive reviews on an earlier draft of this paper.
 
-TODO?
-
-* Access-Opt project?
 * ARCCSS?
 
+.. [#] Karl E. Taylor, Ronald J. Stouffer, and Gerald A. Meehl, 2012: An
+   Overview of CMIP5 and the Experiment Design. Bull. Amer. Meteor. Soc., 93,
+   485–498.
 
-References
-==========
+.. [#] Chelton, D. B., de Szoeke, R. A., Schlax, M. G., El Naggar, K., and
+   Siwertz, N.: Geographical variability of the first baroclinic Rossby radius
+   of deformation, J. Phys.  Oceanogr., 28, 433– 459, 1998.
 
-- Rapid subsurface warming and circulation changes of Antarctic coastal waters
-  by poleward shifting winds (Spence et al.)
+.. [#] Riccardo Farneti, Thomas L. Delworth, Anthony J. Rosati, Stephen M.
+   Griffies, and Fanrong Zeng, 2010: The Role of Mesoscale Eddies in the
+   Rectification of the Southern Ocean Response to Climate Change. J. Phys.
+   Oceanogr., 40, 1539–1557.
+
+.. [#] Spence, P., Griffies S.M., England M.H., Hogg, A.M.C., Saenko,
+   O.A., Jourdain, N.C.: Rapid subsurface warming and circulation changes of
+   Antarctic coastal waters by poleward shifting winds. Geophys. Res. Lett. 41,
+   4601-4610 (2014).
+
+.. [#] Delworth, Thomas L., Anthony Rosati, Whit G Anderson, Alistair Adcroft,
+   Venkatramani Balaji, Rusty Benson, Keith W Dixon, Stephen M Griffies,
+   Hyun-Chul Lee, Ronald C Pacanowski, Gabriel A Vecchi, Andrew T Wittenberg,
+   Fanrong Zeng, and Rong Zhang, April 2012: Simulated climate and climate
+   change in the GFDL CM2.5 high-resolution coupled climate model. Journal of
+   Climate, 25(8)
+
+.. [#] Elements of the Modular Ocean Model (MOM) (2012 release)
+   GFDL Ocean Group Technical Report No. 7
+   Stephen M. Griffies
+   NOAA/Geophysical Fluid Dynamics Laboratory
+   618 + xiii pages
 
 
-.. figure:: figures/snake.pdf
 
-.. figure:: figures/ladder.pdf
+.. figure:: figures/snake.eps
 
-.. figure:: figures/platform.pdf
+.. figure:: figures/ladder.eps
 
-.. figure:: figures/scaling.pdf
+.. figure:: figures/platform.eps
 
-.. figure:: figures/submodels.pdf
+.. figure:: figures/scaling.eps
+
+.. figure:: figures/submodels.eps
