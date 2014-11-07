@@ -3,7 +3,7 @@ PY_SVG = $(PY_SRC:.py=.svg)
 PY_EPS = $(PY_SRC:.py=.eps)
 PY_PDF = $(PY_SRC:.py=.pdf)
 
-INK_SRC = snake.svg ladder.svg
+INK_SRC = snake.svg ladder.svg tofu.svg
 INK_OUT = $(INK_SRC:.svg=.pdf)
 INK_EPS = $(INK_SRC:.svg=.eps)
 

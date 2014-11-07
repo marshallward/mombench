@@ -137,7 +137,7 @@ Fujin
 -----
 
 Fujin is NCI's Fujitsu FX10 cluster consisting of 96 compute nodes, each
-containing a 1.848 GHz 16-core SPARC64 IXfx CPU [#].  For our investigation,
+containing a 1.848 GHz 16-core SPARC64 IXfx CPU.  For our investigation,
 numerical experiments were limited to a maximum of 84 nodes, or 1344 cores.
 
 The interconnect is a streamlined version of the K-Computer's Tofu interconnect
@@ -163,9 +163,12 @@ Fujitsu's MPI library, which is based on Open MPI 1.4.3.  Data IO uses NetCDF
 4.3.2, built with HDF5 1.8.12 and NetCDF-Fortran 4.2.  The model is compiled
 using the ``-Kfast``, ``-Kocl``, and ``-O2`` optimization flags.
 
-.. figure:: figures/snake.eps
+.. figure:: figures/tofu.eps
+   :scale: 60%
 
-.. figure:: figures/ladder.eps
+   Node layouts for each Tofu unit.  Each node number corresponds to 16 domain
+   tiles.  Figure (a) shows the snake layout and figure (b) shows the
+   ladder layout.
 
 We consider two configurations on Fujin, denoted here as *snake* and *ladder*
 layouts.  Node placement for a single Tofu unit for each layout is illustrated
