@@ -18,18 +18,19 @@ Scalability of global 0.25° ocean simulations using MOM
 :Abstract:
 
    We investigate the scalability of global 0.25° resolution ocean-sea ice
-   simulations using the MOM ocean model.  We focus on two major platforms,
-   hosted at the National Computational Infrastructure (NCI) National Facility:
-   an x86-based PRIMERGY cluster with InfiniBand interconnects, and a
-   SPARC-based FX10 system using the Tofu interconnect.  We show that such
-   models produce efficient, scalable results on both platforms up to 960 CPUs.
-   Speeds are notably faster on Raijin when either hyperthreading or fewer
-   cores per node are used.  We also show that the ocean submodel scales up to
-   1920 CPUs with negligible loss of efficiency, but the sea ice and coupler
-   components quickly become inefficient and represent substantial
-   bottlenecks in future scalability.  Our results show that both platforms
-   offer sufficient performance for future scientific research, and highlight
-   to the challenges for future scalability and optimization.
+   simulations using the Modular Ocean Model (MOM).  We focus on two major
+   platforms, hosted at the National Computational Infrastructure (NCI)
+   National Facility: an x86-based PRIMERGY cluster with InfiniBand
+   interconnects, and a SPARC-based FX10 system using the Tofu interconnect.
+   We show that such models produce efficient, scalable results on both
+   platforms up to 960 CPUs.  Speeds are notably faster on Raijin when either
+   hyperthreading or fewer cores per node are used.  We also show that the
+   ocean submodel scales up to 1920 CPUs with negligible loss of efficiency,
+   but the sea ice and coupler components quickly become inefficient and
+   represent substantial bottlenecks in future scalability.  Our results show
+   that both platforms offer sufficient performance for future scientific
+   research, and highlight to the challenges for future scalability and
+   optimization.
 
 
 Introduction
@@ -105,7 +106,7 @@ Raijin is the principal supercomputer of the NCI National Facility.  It is a
 Fujitsu PRIMERGY cluster comprised of 3592 computing nodes, with each
 containing two 2.6 GHz 8-core Intel Xeon Sandy Bridge (E5-2670) CPUs, with
 a total core count of 57472.  Turbo boost is enabled for these runs, increasing
-the maximum clock speed on 16 cores to 3.0 GHz.  Operational nodes have
+the maximum clock speed of 16 cores to 3.0 GHz.  Operational nodes have
 approximately 32 GiB of memory, with more memory available on selected nodes.
 
 The cluster network uses InfiniBand (IB) FDR-14 interconnects, which provide
@@ -161,6 +162,10 @@ The model is compiled using the Fujitsu compiler suite 1.2.1 and includes
 Fujitsu's MPI library, which is based on Open MPI 1.4.3.  Data IO uses NetCDF
 4.3.2, built with HDF5 1.8.12 and NetCDF-Fortran 4.2.  The model is compiled
 using the ``-Kfast``, ``-Kocl``, and ``-O2`` optimization flags.
+
+.. figure:: figures/snake.eps
+
+.. figure:: figures/ladder.eps
 
 We consider two configurations on Fujin, denoted here as *snake* and *ladder*
 layouts.  Node placement for a single Tofu unit for each layout is illustrated
@@ -421,10 +426,6 @@ constructive reviews on an earlier draft of this paper.
    618 + xiii pages
 
 
-
-.. figure:: figures/snake.eps
-
-.. figure:: figures/ladder.eps
 
 .. figure:: figures/platform.eps
 
